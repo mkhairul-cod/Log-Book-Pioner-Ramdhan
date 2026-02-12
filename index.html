@@ -6,76 +6,484 @@
     <title>Log Book Pioner Ramadhan</title>
     <style>
       :root {
-        --green: #127c56;
+        --green-900: #0d4d37;
+        --green-700: #127c56;
+        --green-100: #def7ea;
         --bg: #f4fbf7;
         --text: #183028;
+        --muted: #5a7469;
+        --danger: #b42318;
       }
+
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         font-family: Inter, Arial, sans-serif;
         margin: 0;
         background: var(--bg);
         color: var(--text);
       }
-      .wrap {
-        max-width: 900px;
-        margin: 48px auto;
+
+      .container {
+        max-width: 1080px;
+        margin: 28px auto;
+        padding: 0 16px;
+      }
+
+      .panel {
         background: #fff;
         border-radius: 16px;
-        padding: 28px;
+        padding: 20px;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        margin-bottom: 16px;
       }
+
+      h1, h2 {
+        margin: 0 0 12px;
+      }
+
       h1 {
-        margin-top: 0;
-        color: var(--green);
+        color: var(--green-700);
       }
-      .badge {
-        display: inline-block;
-        background: #def7ea;
-        color: #0f5a40;
-        border-radius: 999px;
-        padding: 6px 12px;
+
+      p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .grid {
+        display: grid;
+        gap: 12px;
+      }
+
+      .grid.cols-3 {
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      }
+
+      .grid.cols-2 {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      }
+
+      label {
+        display: block;
         font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 6px;
       }
-      a {
-        color: var(--green);
+
+      input,
+      select,
+      button {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #d4e6dd;
+        padding: 10px 12px;
+        font-size: 14px;
       }
-      .box {
+
+      button {
+        cursor: pointer;
+        background: var(--green-700);
+        color: #fff;
+        border: 0;
+        font-weight: 600;
+      }
+
+      button.secondary {
+        background: #fff;
+        color: var(--green-900);
+        border: 1px solid #bddbcc;
+      }
+
+      button.danger {
+        background: var(--danger);
+      }
+
+      .actions {
+        display: flex;
+        gap: 8px;
+      }
+
+      .member-row,
+      .log-row {
         border: 1px solid #d9ece2;
         border-radius: 12px;
-        padding: 14px;
-        margin-top: 16px;
+        padding: 12px;
+        margin-top: 10px;
       }
-      code {
-        background: #f1f7f4;
-        padding: 2px 6px;
-        border-radius: 6px;
+
+      .member-row-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .member-row strong {
+        font-size: 16px;
+      }
+
+      .member-row small,
+      .date-text {
+        color: var(--muted);
+      }
+
+      .check-grid {
+        margin-top: 10px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 8px;
+      }
+
+      .check-item {
+        border: 1px solid #e3efe8;
+        border-radius: 10px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .check-item input {
+        width: 18px;
+        height: 18px;
+        margin: 0;
+      }
+
+      .empty {
+        text-align: center;
+        padding: 20px;
+        color: var(--muted);
+        border: 1px dashed #c8dfd2;
+        border-radius: 12px;
+      }
+
+      .stat {
+        background: var(--green-100);
+        border-radius: 12px;
+        padding: 12px;
+      }
+
+      .stat b {
+        display: block;
+        color: var(--green-900);
+        font-size: 22px;
+      }
+
+      footer {
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+        margin: 18px 0 8px;
+      }
+
+      @media (max-width: 640px) {
+        .member-row-head {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .actions {
+          width: 100%;
+        }
       }
     </style>
   </head>
   <body>
-    <main class="wrap">
-      <span class="badge">Deployment fixed</span>
-      <h1>Log Book Pioner Ramadhan</h1>
-      <p>
-        Deploy sebelumnya menampilkan <code>404 NOT_FOUND</code> karena repository belum memiliki entrypoint web.
-        Sekarang root URL sudah aktif dan bisa diakses.
-      </p>
-
-      <div class="box">
-        <strong>Dokumen utama:</strong>
-        <ul>
-          <li><a href="/docs/BLUEPRINT_RAMADAN_FAMILY_MONITORING.md">Blueprint Komprehensif</a></li>
-          <li><a href="/docs/DEPLOYMENT_TROUBLESHOOTING.md">Panduan Troubleshooting Deploy</a></li>
-        </ul>
-      </div>
-
-      <div class="box">
-        <strong>Catatan penting:</strong>
+    <div class="container">
+      <section class="panel">
+        <h1>Log Book Pioner Ramadhan</h1>
         <p>
-          Untuk aplikasi production Laravel (auth, role, MySQL, queue, scheduler), disarankan deploy ke VPS/Render/Railway.
-          Vercel lebih cocok untuk static site atau serverless sederhana.
+          Aplikasi web sederhana untuk mencatat amalan harian anggota keluarga selama Ramadhan.
+          Data disimpan di browser (localStorage) sehingga bisa langsung dipakai tanpa backend.
         </p>
-      </div>
-    </main>
+      </section>
+
+      <section class="panel">
+        <h2>Tambah Anggota</h2>
+        <div class="grid cols-3">
+          <div>
+            <label for="name">Nama</label>
+            <input id="name" type="text" placeholder="Contoh: Ahmad" />
+          </div>
+          <div>
+            <label for="role">Peran</label>
+            <select id="role">
+              <option value="Ayah">Ayah</option>
+              <option value="Ibu">Ibu</option>
+              <option value="Anak">Anak</option>
+              <option value="Lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div>
+            <label for="target">Target Kebaikan / Hari</label>
+            <input id="target" type="number" min="1" value="5" />
+          </div>
+        </div>
+        <div class="actions" style="margin-top: 12px">
+          <button id="addMemberBtn">Tambah Anggota</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>Catatan Harian</h2>
+        <div class="grid cols-2">
+          <div>
+            <label for="logDate">Tanggal</label>
+            <input id="logDate" type="date" />
+          </div>
+          <div>
+            <label for="memberFilter">Filter Anggota</label>
+            <select id="memberFilter">
+              <option value="all">Semua anggota</option>
+            </select>
+          </div>
+        </div>
+        <div id="membersContainer" style="margin-top: 12px"></div>
+      </section>
+
+      <section class="panel">
+        <h2>Ringkasan</h2>
+        <div class="grid cols-3" id="stats"></div>
+      </section>
+
+      <footer>
+        Dibuat untuk langsung dipakai sebagai web app dasar. Lanjutkan ke backend kapan saja.
+      </footer>
+    </div>
+
+    <script>
+      const STORAGE_KEY = 'ramadhan-logbook-v1';
+      const TASKS = ['Sahur', 'Shalat 5 Waktu', 'Tilawah', 'Sedekah', 'Tarawih'];
+
+      const state = {
+        members: [],
+        logs: {}
+      };
+
+      const nameInput = document.getElementById('name');
+      const roleInput = document.getElementById('role');
+      const targetInput = document.getElementById('target');
+      const addMemberBtn = document.getElementById('addMemberBtn');
+      const logDateInput = document.getElementById('logDate');
+      const memberFilterInput = document.getElementById('memberFilter');
+      const membersContainer = document.getElementById('membersContainer');
+      const statsContainer = document.getElementById('stats');
+
+      function loadState() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        try {
+          const parsed = JSON.parse(raw);
+          state.members = parsed.members || [];
+          state.logs = parsed.logs || {};
+        } catch {
+          localStorage.removeItem(STORAGE_KEY);
+        }
+      }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+
+      function toDateKey(date) {
+        return new Date(date).toISOString().slice(0, 10);
+      }
+
+      function todayKey() {
+        return new Date().toISOString().slice(0, 10);
+      }
+
+      function getLogKey(memberId, dateKey) {
+        return `${memberId}__${dateKey}`;
+      }
+
+      function ensureLog(memberId, dateKey) {
+        const key = getLogKey(memberId, dateKey);
+        if (!state.logs[key]) {
+          state.logs[key] = TASKS.reduce((acc, task) => {
+            acc[task] = false;
+            return acc;
+          }, {});
+        }
+        return state.logs[key];
+      }
+
+      function addMember() {
+        const name = nameInput.value.trim();
+        const role = roleInput.value;
+        const target = Number(targetInput.value || 0);
+
+        if (!name) {
+          alert('Nama wajib diisi.');
+          return;
+        }
+
+        state.members.push({
+          id: crypto.randomUUID(),
+          name,
+          role,
+          target: target > 0 ? target : 1,
+          createdAt: new Date().toISOString()
+        });
+
+        nameInput.value = '';
+        targetInput.value = '5';
+        saveState();
+        renderAll();
+      }
+
+      function deleteMember(memberId) {
+        state.members = state.members.filter((m) => m.id !== memberId);
+        Object.keys(state.logs).forEach((key) => {
+          if (key.startsWith(`${memberId}__`)) {
+            delete state.logs[key];
+          }
+        });
+        saveState();
+        renderAll();
+      }
+
+      function toggleTask(memberId, dateKey, task, checked) {
+        const log = ensureLog(memberId, dateKey);
+        log[task] = checked;
+        saveState();
+        renderStats();
+      }
+
+      function renderMemberFilter() {
+        const current = memberFilterInput.value;
+        memberFilterInput.innerHTML = '<option value="all">Semua anggota</option>';
+        state.members.forEach((m) => {
+          const opt = document.createElement('option');
+          opt.value = m.id;
+          opt.textContent = `${m.name} (${m.role})`;
+          memberFilterInput.appendChild(opt);
+        });
+        if (current && [...memberFilterInput.options].some((o) => o.value === current)) {
+          memberFilterInput.value = current;
+        }
+      }
+
+      function renderMembers() {
+        const dateKey = toDateKey(logDateInput.value || todayKey());
+        const filter = memberFilterInput.value;
+        const members = filter === 'all'
+          ? state.members
+          : state.members.filter((m) => m.id === filter);
+
+        membersContainer.innerHTML = '';
+
+        if (members.length === 0) {
+          const empty = document.createElement('div');
+          empty.className = 'empty';
+          empty.textContent = state.members.length
+            ? 'Tidak ada anggota sesuai filter.'
+            : 'Belum ada anggota. Tambahkan anggota dulu.';
+          membersContainer.appendChild(empty);
+          return;
+        }
+
+        members.forEach((member) => {
+          const log = ensureLog(member.id, dateKey);
+          const completed = Object.values(log).filter(Boolean).length;
+
+          const row = document.createElement('div');
+          row.className = 'member-row';
+          row.innerHTML = `
+            <div class="member-row-head">
+              <div>
+                <strong>${member.name}</strong>
+                <div><small>${member.role} • Target ${member.target}/hari</small></div>
+                <div class="date-text">Tanggal: ${dateKey}</div>
+              </div>
+              <div class="actions">
+                <button class="secondary" data-action="reset" data-id="${member.id}">Reset Hari Ini</button>
+                <button class="danger" data-action="delete" data-id="${member.id}">Hapus Anggota</button>
+              </div>
+            </div>
+            <div class="check-grid">
+              ${TASKS.map((task) => `
+                <label class="check-item">
+                  <input type="checkbox" data-member="${member.id}" data-task="${task}" ${log[task] ? 'checked' : ''} />
+                  <span>${task}</span>
+                </label>
+              `).join('')}
+            </div>
+            <div style="margin-top: 8px" class="date-text">Progress: ${completed}/${TASKS.length}</div>
+          `;
+
+          row.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+            checkbox.addEventListener('change', (event) => {
+              const memberId = event.target.getAttribute('data-member');
+              const task = event.target.getAttribute('data-task');
+              toggleTask(memberId, dateKey, task, event.target.checked);
+            });
+          });
+
+          row.querySelector('[data-action="delete"]').addEventListener('click', () => {
+            if (confirm(`Hapus anggota ${member.name}?`)) {
+              deleteMember(member.id);
+            }
+          });
+
+          row.querySelector('[data-action="reset"]').addEventListener('click', () => {
+            state.logs[getLogKey(member.id, dateKey)] = TASKS.reduce((acc, task) => {
+              acc[task] = false;
+              return acc;
+            }, {});
+            saveState();
+            renderMembers();
+            renderStats();
+          });
+
+          membersContainer.appendChild(row);
+        });
+      }
+
+      function renderStats() {
+        const dateKey = toDateKey(logDateInput.value || todayKey());
+        let totalChecks = 0;
+        let completedMembers = 0;
+
+        state.members.forEach((member) => {
+          const log = ensureLog(member.id, dateKey);
+          const done = Object.values(log).filter(Boolean).length;
+          totalChecks += done;
+          if (done >= member.target) completedMembers += 1;
+        });
+
+        const possible = state.members.length * TASKS.length;
+        const percent = possible ? Math.round((totalChecks / possible) * 100) : 0;
+
+        const cards = [
+          ['Total Anggota', state.members.length],
+          ['Checklist Selesai', `${totalChecks}/${possible}`],
+          ['Pencapaian Harian', `${percent}%`],
+          ['Capai Target', `${completedMembers} anggota`],
+          ['Tanggal Aktif', dateKey]
+        ];
+
+        statsContainer.innerHTML = cards
+          .map(([label, value]) => `<div class="stat"><span>${label}</span><b>${value}</b></div>`)
+          .join('');
+      }
+
+      function renderAll() {
+        renderMemberFilter();
+        renderMembers();
+        renderStats();
+      }
+
+      addMemberBtn.addEventListener('click', addMember);
+      logDateInput.addEventListener('change', renderAll);
+      memberFilterInput.addEventListener('change', renderMembers);
+
+      logDateInput.value = todayKey();
+      loadState();
+      renderAll();
+    </script>
   </body>
 </html>
