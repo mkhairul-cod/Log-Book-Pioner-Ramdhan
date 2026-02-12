@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Book Pioner Ramadhan</title>
+    <style>
+      :root {
+        --green: #127c56;
+        --bg: #f4fbf7;
+        --text: #183028;
+      }
+      body {
+        font-family: Inter, Arial, sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+      .wrap {
+        max-width: 900px;
+        margin: 48px auto;
+        background: #fff;
+        border-radius: 16px;
+        padding: 28px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      }
+      h1 {
+        margin-top: 0;
+        color: var(--green);
+      }
+      .badge {
+        display: inline-block;
+        background: #def7ea;
+        color: #0f5a40;
+        border-radius: 999px;
+        padding: 6px 12px;
+        font-size: 13px;
+      }
+      a {
+        color: var(--green);
+      }
+      .box {
+        border: 1px solid #d9ece2;
+        border-radius: 12px;
+        padding: 14px;
+        margin-top: 16px;
+      }
+      code {
+        background: #f1f7f4;
+        padding: 2px 6px;
+        border-radius: 6px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="wrap">
+      <span class="badge">Deployment fixed</span>
+      <h1>Log Book Pioner Ramadhan</h1>
+      <p>
+        Deploy sebelumnya menampilkan <code>404 NOT_FOUND</code> karena repository belum memiliki entrypoint web.
+        Sekarang root URL sudah aktif dan bisa diakses.
+      </p>
+
+      <div class="box">
+        <strong>Dokumen utama:</strong>
+        <ul>
+          <li><a href="/docs/BLUEPRINT_RAMADAN_FAMILY_MONITORING.md">Blueprint Komprehensif</a></li>
+          <li><a href="/docs/DEPLOYMENT_TROUBLESHOOTING.md">Panduan Troubleshooting Deploy</a></li>
+        </ul>
+      </div>
+
+      <div class="box">
+        <strong>Catatan penting:</strong>
+        <p>
+          Untuk aplikasi production Laravel (auth, role, MySQL, queue, scheduler), disarankan deploy ke VPS/Render/Railway.
+          Vercel lebih cocok untuk static site atau serverless sederhana.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
