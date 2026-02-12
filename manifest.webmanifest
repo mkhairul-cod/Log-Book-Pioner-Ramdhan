@@ -1,11 +1,11 @@
 {
-  "name": "Log Book Pioner Ramadhan",
-  "short_name": "LogBook Ramadhan",
-  "description": "Catatan amalan harian Ramadhan keluarga.",
+  "name": "Log Book Pioner Ramadhan Pro",
+  "short_name": "LogBook Pro",
+  "description": "Monitoring detail amalan harian Ramadhan keluarga.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f4fbf7",
-  "theme_color": "#127c56",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0f766e",
   "icons": [
     {
       "src": "/icon.svg",

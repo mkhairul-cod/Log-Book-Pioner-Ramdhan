@@ -3,208 +3,657 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#127c56" />
+    <meta name="theme-color" content="#0f766e" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-    <title>Log Book Pioner Ramadhan</title>
+    <title>Log Book Pioner Ramadhan Pro</title>
     <style>
-      :root { --green-900:#0d4d37; --green-700:#127c56; --green-100:#def7ea; --bg:#f4fbf7; --text:#183028; --muted:#5a7469; --danger:#b42318; }
+      :root {
+        --bg: #f4f7fb;
+        --surface: #ffffff;
+        --text: #0f172a;
+        --muted: #64748b;
+        --primary: #0f766e;
+        --primary-soft: #ccfbf1;
+        --danger: #be123c;
+        --warning: #ca8a04;
+        --line: #e2e8f0;
+        --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+      }
+
       * { box-sizing: border-box; }
-      body { font-family: Inter, Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
-      .container { max-width: 1080px; margin: 28px auto; padding: 0 16px; }
-      .panel { background:#fff; border-radius:16px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.08); margin-bottom:16px; }
-      h1,h2 { margin:0 0 12px; } h1 { color: var(--green-700); } p { margin:0; color: var(--muted); }
-      .grid { display:grid; gap:12px; } .grid.cols-3 { grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); } .grid.cols-2 { grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); }
-      label { display:block; font-size:13px; font-weight:600; margin-bottom:6px; }
-      input,select,button { width:100%; border-radius:10px; border:1px solid #d4e6dd; padding:10px 12px; font-size:14px; }
-      button { cursor:pointer; background:var(--green-700); color:#fff; border:0; font-weight:600; }
-      button.secondary { background:#fff; color:var(--green-900); border:1px solid #bddbcc; }
-      button.danger { background:var(--danger); }
-      .actions { display:flex; gap:8px; }
-      .member-row { border:1px solid #d9ece2; border-radius:12px; padding:12px; margin-top:10px; }
-      .member-row-head { display:flex; align-items:center; justify-content:space-between; gap:12px; }
-      .member-row strong { font-size:16px; }
-      .member-row small,.date-text { color:var(--muted); }
-      .check-grid { margin-top:10px; display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; }
-      .check-item { border:1px solid #e3efe8; border-radius:10px; padding:8px; display:flex; align-items:center; gap:8px; }
-      .check-item input { width:18px; height:18px; margin:0; }
-      .empty { text-align:center; padding:20px; color:var(--muted); border:1px dashed #c8dfd2; border-radius:12px; }
-      .stat { background:var(--green-100); border-radius:12px; padding:12px; } .stat b { display:block; color:var(--green-900); font-size:22px; }
-      .install-box { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-      .install-status { font-size:13px; color:var(--muted); }
-      footer { text-align:center; color:var(--muted); font-size:13px; margin:18px 0 8px; }
-      @media (max-width:640px){ .member-row-head{flex-direction:column;align-items:flex-start;} .actions{width:100%;} }
+      body { margin: 0; font-family: Inter, Segoe UI, Arial, sans-serif; background: radial-gradient(circle at top right, #e0f2fe, #f8fafc 45%), var(--bg); color: var(--text); }
+      .app { max-width: 1320px; margin: 0 auto; padding: 18px; }
+
+      .hero {
+        background: linear-gradient(135deg, #0f766e, #155e75);
+        border-radius: 20px;
+        color: #fff;
+        padding: 18px;
+        box-shadow: var(--shadow);
+        display: grid;
+        gap: 14px;
+      }
+
+      .hero-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
+      .hero h1 { margin: 0; font-size: clamp(22px, 3vw, 32px); }
+      .hero p { margin: 6px 0 0; color: #dbeafe; }
+      .pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.1); padding: 7px 12px; border-radius: 999px; font-size: 12px; }
+
+      .top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+      button, input, select, textarea { font: inherit; }
+      button {
+        border: 0;
+        border-radius: 10px;
+        cursor: pointer;
+        padding: 10px 12px;
+        font-weight: 600;
+      }
+      .btn-primary { background: #0f766e; color: #fff; }
+      .btn-soft { background: #fff; color: #0f172a; border: 1px solid #cbd5e1; }
+      .btn-danger { background: var(--danger); color: #fff; }
+      .btn-warning { background: var(--warning); color: #fff; }
+      .btn-hero { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.32); }
+
+      .layout { display: grid; grid-template-columns: 280px 1fr; gap: 16px; margin-top: 16px; }
+      .sidebar, .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
+      .sidebar { padding: 12px; height: fit-content; position: sticky; top: 12px; }
+      .nav-btn { width: 100%; text-align: left; background: transparent; color: var(--text); border: 1px solid transparent; margin-bottom: 6px; }
+      .nav-btn.active { background: var(--primary-soft); border-color: #99f6e4; color: #134e4a; }
+      .main { display: grid; gap: 16px; }
+
+      .panel { padding: 14px; }
+      .panel h2 { margin: 0 0 10px; font-size: 20px; }
+      .sub { color: var(--muted); font-size: 13px; margin-top: -6px; margin-bottom: 10px; }
+
+      .stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+      .card { background: linear-gradient(180deg, #fff, #f8fafc); border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; }
+      .card span { color: var(--muted); font-size: 12px; }
+      .card b { display: block; font-size: 26px; margin-top: 4px; }
+
+      .grid-2 { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+      .grid-3 { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+
+      label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 6px; }
+      input, select, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px 11px; background: #fff; }
+      textarea { min-height: 90px; resize: vertical; }
+      .row-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+
+      .table-wrap { overflow: auto; border: 1px solid #e2e8f0; border-radius: 12px; }
+      table { width: 100%; border-collapse: collapse; min-width: 940px; }
+      th, td { border-bottom: 1px solid #e2e8f0; padding: 8px; vertical-align: top; text-align: left; }
+      th { background: #f8fafc; font-size: 12px; color: #475569; }
+      .member-chip { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 12px; background: #ecfeff; color: #155e75; border: 1px solid #bae6fd; }
+      .progress { height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin-top: 6px; }
+      .progress > div { height: 100%; background: linear-gradient(90deg, #14b8a6, #0ea5e9); }
+
+      .task-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+      .task-tag { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #dbeafe; background: #eff6ff; color: #1e3a8a; border-radius: 999px; padding: 5px 10px; font-size: 12px; }
+      .task-tag button { padding: 2px 7px; border-radius: 999px; border: 0; background: #dbeafe; color: #1e3a8a; cursor: pointer; }
+
+      .timeline { display: grid; gap: 8px; }
+      .timeline-item { border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; gap: 10px; }
+      .timeline-item small { color: var(--muted); }
+
+      .hidden { display: none !important; }
+      .toast {
+        position: fixed; right: 14px; bottom: 14px; background: #0f172a; color: #fff; border-radius: 10px; padding: 10px 12px;
+        opacity: 0; transform: translateY(20px); transition: .25s ease; pointer-events: none; z-index: 999;
+      }
+      .toast.show { opacity: 1; transform: translateY(0); }
+
+      @media (max-width: 980px) {
+        .layout { grid-template-columns: 1fr; }
+        .sidebar { position: static; }
+      }
     </style>
   </head>
   <body>
-    <div class="container">
-      <section class="panel">
-        <h1>Log Book Pioner Ramadhan</h1>
-        <p>Aplikasi web untuk mencatat amalan harian Ramadhan keluarga. Data tersimpan di browser (localStorage).</p>
-      </section>
-
-      <section class="panel">
-        <h2>WPA Builder (PWA Install)</h2>
-        <div class="install-box">
-          <button id="installBtn" class="secondary" disabled>Install App</button>
-          <span id="installStatus" class="install-status">Mode install belum tersedia di browser ini.</span>
+    <div class="app">
+      <header class="hero">
+        <div class="hero-top">
+          <div>
+            <h1>Log Book Pioner Ramadhan Pro</h1>
+            <p>Versi detail & spesifik: manajemen anggota, checklist custom, analitik, catatan harian, export/import, dan PWA install.</p>
+          </div>
+          <div class="top-actions">
+            <button id="installBtn" class="btn-hero" disabled>Install App</button>
+            <button id="darkModeBtn" class="btn-hero">Mode Gelap</button>
+            <span id="installStatus" class="pill">PWA: menunggu dukungan browser</span>
+          </div>
         </div>
-      </section>
+        <div class="stats" id="heroStats"></div>
+      </header>
 
-      <section class="panel">
-        <h2>Tambah Anggota</h2>
-        <div class="grid cols-3">
-          <div><label for="name">Nama</label><input id="name" type="text" placeholder="Contoh: Ahmad" /></div>
-          <div><label for="role">Peran</label><select id="role"><option>Ayah</option><option>Ibu</option><option>Anak</option><option>Lainnya</option></select></div>
-          <div><label for="target">Target Kebaikan / Hari</label><input id="target" type="number" min="1" value="5" /></div>
-        </div>
-        <div class="actions" style="margin-top: 12px"><button id="addMemberBtn">Tambah Anggota</button></div>
-      </section>
+      <div class="layout">
+        <aside class="sidebar">
+          <button class="nav-btn active" data-tab="dashboard">📊 Dashboard</button>
+          <button class="nav-btn" data-tab="members">👥 Anggota</button>
+          <button class="nav-btn" data-tab="logbook">📝 Logbook Harian</button>
+          <button class="nav-btn" data-tab="analytics">📈 Analitik</button>
+          <button class="nav-btn" data-tab="settings">⚙️ Pengaturan & Data</button>
+        </aside>
 
-      <section class="panel">
-        <h2>Catatan Harian</h2>
-        <div class="grid cols-2">
-          <div><label for="logDate">Tanggal</label><input id="logDate" type="date" /></div>
-          <div><label for="memberFilter">Filter Anggota</label><select id="memberFilter"><option value="all">Semua anggota</option></select></div>
-        </div>
-        <div id="membersContainer" style="margin-top: 12px"></div>
-      </section>
+        <main class="main">
+          <section class="panel" data-panel="dashboard">
+            <h2>Dashboard Harian</h2>
+            <p class="sub">Ringkasan cepat untuk tanggal aktif.</p>
+            <div class="grid-3">
+              <div>
+                <label for="activeDate">Tanggal aktif</label>
+                <input id="activeDate" type="date" />
+              </div>
+              <div>
+                <label for="memberSearch">Cari anggota</label>
+                <input id="memberSearch" type="text" placeholder="Nama anggota..." />
+              </div>
+              <div>
+                <label for="memberFilter">Filter peran</label>
+                <select id="memberFilter">
+                  <option value="all">Semua peran</option>
+                  <option value="Ayah">Ayah</option>
+                  <option value="Ibu">Ibu</option>
+                  <option value="Anak">Anak</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+              </div>
+            </div>
+            <div class="table-wrap" style="margin-top:10px">
+              <table>
+                <thead><tr><th>Anggota</th><th>Peran</th><th>Target</th><th>Progress Hari Ini</th><th>Status</th><th>Aksi</th></tr></thead>
+                <tbody id="dashboardRows"></tbody>
+              </table>
+            </div>
+          </section>
 
-      <section class="panel">
-        <h2>Ringkasan</h2>
-        <div class="grid cols-3" id="stats"></div>
-      </section>
+          <section class="panel hidden" data-panel="members">
+            <h2>Manajemen Anggota Detail</h2>
+            <p class="sub">Setiap anggota bisa punya profil lengkap untuk monitoring lebih spesifik.</p>
+            <div class="grid-2">
+              <div>
+                <label>Nama Lengkap</label>
+                <input id="name" type="text" placeholder="Contoh: Ahmad Fauzi" />
+              </div>
+              <div>
+                <label>Peran</label>
+                <select id="role"><option>Ayah</option><option>Ibu</option><option>Anak</option><option>Lainnya</option></select>
+              </div>
+              <div>
+                <label>Usia</label>
+                <input id="age" type="number" min="1" placeholder="Contoh: 14" />
+              </div>
+              <div>
+                <label>Target Poin Harian</label>
+                <input id="target" type="number" min="1" value="5" />
+              </div>
+              <div>
+                <label>No. WhatsApp</label>
+                <input id="phone" type="text" placeholder="08xxxxxxxxxx" />
+              </div>
+              <div>
+                <label>Catatan Khusus Anggota</label>
+                <input id="note" type="text" placeholder="Contoh: fokus tilawah 2 juz" />
+              </div>
+            </div>
+            <div class="row-actions">
+              <button id="addMemberBtn" class="btn-primary">Tambah Anggota</button>
+              <button id="clearMembersBtn" class="btn-danger">Hapus Semua Anggota</button>
+            </div>
+            <div id="memberList" style="margin-top:10px" class="timeline"></div>
+          </section>
 
-      <footer>Web app dasar + PWA install siap dipakai.</footer>
+          <section class="panel hidden" data-panel="logbook">
+            <h2>Logbook Harian Detail & Spesifik</h2>
+            <p class="sub">Checklist default + custom task + catatan harian setiap anggota.</p>
+            <div class="grid-2">
+              <div>
+                <label>Tambah Task Custom</label>
+                <input id="newTaskInput" type="text" placeholder="Contoh: Qiyamul Lail" />
+              </div>
+              <div>
+                <label>&nbsp;</label>
+                <button id="addTaskBtn" class="btn-soft">Tambah Task Custom</button>
+              </div>
+            </div>
+            <div id="taskTags" class="task-tags" style="margin-top:8px"></div>
+            <div id="logbookContainer" class="timeline" style="margin-top:10px"></div>
+          </section>
+
+          <section class="panel hidden" data-panel="analytics">
+            <h2>Analitik Progres Ramadhan</h2>
+            <p class="sub">Metrik ringkas: rata-rata pencapaian, streak aktif, dan peringkat anggota.</p>
+            <div class="stats" id="analyticsStats"></div>
+            <div class="table-wrap" style="margin-top:10px">
+              <table>
+                <thead><tr><th>Peringkat</th><th>Anggota</th><th>Total Checklist</th><th>Rata-rata / Hari</th><th>Streak</th></tr></thead>
+                <tbody id="leaderboardRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel hidden" data-panel="settings">
+            <h2>Pengaturan & Backup Data</h2>
+            <p class="sub">Lindungi data logbook: export JSON, import JSON, reset data, dan utilitas.</p>
+            <div class="row-actions">
+              <button id="exportBtn" class="btn-primary">Export JSON</button>
+              <button id="importBtn" class="btn-soft">Import JSON</button>
+              <input id="importFile" type="file" accept="application/json" class="hidden" />
+              <button id="resetAllBtn" class="btn-danger">Reset Semua Data</button>
+            </div>
+            <div style="margin-top:10px">
+              <label>Snapshot data (read-only)</label>
+              <textarea id="snapshot" readonly></textarea>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
-      const STORAGE_KEY = 'ramadhan-logbook-v2';
-      const TASKS = ['Sahur', 'Shalat 5 Waktu', 'Tilawah', 'Sedekah', 'Tarawih'];
-      const state = { members: [], logs: {} };
+      const STORAGE_KEY = 'ramadhan-logbook-pro-v3';
+      const DEFAULT_TASKS = ['Sahur', 'Shalat Subuh', 'Shalat Dzuhur', 'Shalat Ashar', 'Shalat Maghrib', 'Shalat Isya', 'Tilawah', 'Sedekah', 'Tarawih'];
+
+      const state = {
+        members: [],
+        logs: {},
+        tasks: [...DEFAULT_TASKS],
+        theme: 'light'
+      };
+
       let deferredPrompt = null;
 
-      const nameInput = document.getElementById('name');
-      const roleInput = document.getElementById('role');
-      const targetInput = document.getElementById('target');
-      const addMemberBtn = document.getElementById('addMemberBtn');
-      const logDateInput = document.getElementById('logDate');
-      const memberFilterInput = document.getElementById('memberFilter');
-      const membersContainer = document.getElementById('membersContainer');
-      const statsContainer = document.getElementById('stats');
-      const installBtn = document.getElementById('installBtn');
-      const installStatus = document.getElementById('installStatus');
+      const el = (id) => document.getElementById(id);
+      const activeDate = el('activeDate');
+      const memberSearch = el('memberSearch');
+      const memberFilter = el('memberFilter');
+      const dashboardRows = el('dashboardRows');
+      const heroStats = el('heroStats');
+      const analyticsStats = el('analyticsStats');
+      const leaderboardRows = el('leaderboardRows');
+      const logbookContainer = el('logbookContainer');
+      const taskTags = el('taskTags');
+      const memberList = el('memberList');
+      const snapshot = el('snapshot');
+      const installBtn = el('installBtn');
+      const installStatus = el('installStatus');
+      const toast = el('toast');
+
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2000);
+      }
+
+      function todayKey() { return new Date().toISOString().slice(0, 10); }
+      function getDateKey(date) { return new Date(date).toISOString().slice(0, 10); }
+      function getLogKey(memberId, date) { return `${memberId}__${date}`; }
 
       function loadState() {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) return;
-        try { const parsed = JSON.parse(raw); state.members = parsed.members || []; state.logs = parsed.logs || {}; }
-        catch { localStorage.removeItem(STORAGE_KEY); }
+        try {
+          const parsed = JSON.parse(raw);
+          state.members = parsed.members || [];
+          state.logs = parsed.logs || {};
+          state.tasks = parsed.tasks?.length ? parsed.tasks : [...DEFAULT_TASKS];
+          state.theme = parsed.theme || 'light';
+        } catch {
+          localStorage.removeItem(STORAGE_KEY);
+        }
       }
-      function saveState() { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-      function toDateKey(date) { return new Date(date).toISOString().slice(0, 10); }
-      function todayKey() { return new Date().toISOString().slice(0, 10); }
-      function getLogKey(memberId, dateKey) { return `${memberId}__${dateKey}`; }
+
+      function saveState() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        snapshot.value = JSON.stringify(state, null, 2);
+      }
+
       function ensureLog(memberId, dateKey) {
         const key = getLogKey(memberId, dateKey);
-        if (!state.logs[key]) state.logs[key] = TASKS.reduce((acc, task) => ((acc[task] = false), acc), {});
+        if (!state.logs[key]) {
+          const checks = {};
+          state.tasks.forEach((task) => (checks[task] = false));
+          state.logs[key] = { checks, note: '', updatedAt: new Date().toISOString() };
+        }
+        if (!state.logs[key].checks) state.logs[key].checks = {};
+        state.tasks.forEach((task) => {
+          if (state.logs[key].checks[task] === undefined) state.logs[key].checks[task] = false;
+        });
         return state.logs[key];
       }
 
       function addMember() {
-        const name = nameInput.value.trim();
-        if (!name) return alert('Nama wajib diisi.');
-        state.members.push({ id: crypto.randomUUID(), name, role: roleInput.value, target: Math.max(1, Number(targetInput.value || 1)) });
-        nameInput.value = ''; targetInput.value = '5';
-        saveState(); renderAll();
+        const name = el('name').value.trim();
+        if (!name) return showToast('Nama wajib diisi.');
+        const member = {
+          id: crypto.randomUUID(),
+          name,
+          role: el('role').value,
+          age: Number(el('age').value || 0),
+          target: Math.max(1, Number(el('target').value || 1)),
+          phone: el('phone').value.trim(),
+          note: el('note').value.trim(),
+          createdAt: new Date().toISOString()
+        };
+        state.members.push(member);
+        ['name','age','phone','note'].forEach((id) => (el(id).value = ''));
+        el('target').value = '5';
+        saveState();
+        renderAll();
+        showToast('Anggota berhasil ditambahkan.');
       }
 
-      function deleteMember(memberId) {
+      function removeMember(memberId) {
         state.members = state.members.filter((m) => m.id !== memberId);
-        Object.keys(state.logs).forEach((key) => key.startsWith(`${memberId}__`) && delete state.logs[key]);
-        saveState(); renderAll();
+        Object.keys(state.logs).forEach((k) => k.startsWith(`${memberId}__`) && delete state.logs[k]);
+        saveState();
+        renderAll();
       }
 
-      function toggleTask(memberId, dateKey, task, checked) { ensureLog(memberId, dateKey)[task] = checked; saveState(); renderStats(); }
-
-      function renderMemberFilter() {
-        const current = memberFilterInput.value;
-        memberFilterInput.innerHTML = '<option value="all">Semua anggota</option>';
-        state.members.forEach((m) => memberFilterInput.insertAdjacentHTML('beforeend', `<option value="${m.id}">${m.name} (${m.role})</option>`));
-        if ([...memberFilterInput.options].some((o) => o.value === current)) memberFilterInput.value = current;
+      function clearMembers() {
+        if (!confirm('Yakin hapus semua anggota?')) return;
+        state.members = [];
+        state.logs = {};
+        saveState();
+        renderAll();
+        showToast('Semua anggota dihapus.');
       }
 
-      function renderMembers() {
-        const dateKey = toDateKey(logDateInput.value || todayKey());
-        const filter = memberFilterInput.value;
-        const members = filter === 'all' ? state.members : state.members.filter((m) => m.id === filter);
-        membersContainer.innerHTML = '';
-        if (!members.length) return membersContainer.insertAdjacentHTML('beforeend', `<div class="empty">${state.members.length ? 'Tidak ada anggota sesuai filter.' : 'Belum ada anggota. Tambahkan anggota dulu.'}</div>`);
+      function addTask() {
+        const value = el('newTaskInput').value.trim();
+        if (!value) return;
+        if (state.tasks.includes(value)) return showToast('Task sudah ada.');
+        state.tasks.push(value);
+        el('newTaskInput').value = '';
+        saveState();
+        renderAll();
+      }
 
-        members.forEach((member) => {
-          const log = ensureLog(member.id, dateKey);
-          const completed = Object.values(log).filter(Boolean).length;
-          const tasksHtml = TASKS.map((task) => `<label class="check-item"><input type="checkbox" data-member="${member.id}" data-task="${task}" ${log[task] ? 'checked' : ''} /><span>${task}</span></label>`).join('');
-          const html = `<div class="member-row"><div class="member-row-head"><div><strong>${member.name}</strong><div><small>${member.role} • Target ${member.target}/hari</small></div><div class="date-text">Tanggal: ${dateKey}</div></div><div class="actions"><button class="secondary" data-action="reset" data-id="${member.id}">Reset Hari Ini</button><button class="danger" data-action="delete" data-id="${member.id}">Hapus Anggota</button></div></div><div class="check-grid">${tasksHtml}</div><div style="margin-top:8px" class="date-text">Progress: ${completed}/${TASKS.length}</div></div>`;
-          membersContainer.insertAdjacentHTML('beforeend', html);
+      function removeTask(task) {
+        if (DEFAULT_TASKS.includes(task)) return showToast('Task default tidak bisa dihapus.');
+        state.tasks = state.tasks.filter((t) => t !== task);
+        Object.values(state.logs).forEach((entry) => delete entry.checks[task]);
+        saveState();
+        renderAll();
+      }
+
+      function computeMemberProgress(memberId, dateKey) {
+        const log = ensureLog(memberId, dateKey);
+        const done = Object.values(log.checks).filter(Boolean).length;
+        const total = state.tasks.length;
+        const percent = total ? Math.round((done / total) * 100) : 0;
+        return { done, total, percent };
+      }
+
+      function renderHeroStats() {
+        const dateKey = getDateKey(activeDate.value || todayKey());
+        let totalChecks = 0;
+        let totalPossible = state.members.length * state.tasks.length;
+        let targetReached = 0;
+        state.members.forEach((m) => {
+          const p = computeMemberProgress(m.id, dateKey);
+          totalChecks += p.done;
+          if (p.done >= m.target) targetReached += 1;
         });
+        const percent = totalPossible ? Math.round((totalChecks / totalPossible) * 100) : 0;
+        const cards = [
+          ['Anggota Aktif', state.members.length],
+          ['Task Aktif', state.tasks.length],
+          ['Checklist Hari Ini', `${totalChecks}/${totalPossible}`],
+          ['Capaian Harian', `${percent}%`],
+          ['Capai Target', `${targetReached} anggota`]
+        ];
+        heroStats.innerHTML = cards.map(([label, value]) => `<div class="card"><span>${label}</span><b>${value}</b></div>`).join('');
+      }
 
-        membersContainer.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-          checkbox.addEventListener('change', (event) => {
-            const memberId = event.target.getAttribute('data-member');
-            const task = event.target.getAttribute('data-task');
-            toggleTask(memberId, dateKey, task, event.target.checked);
+      function filteredMembers() {
+        const q = memberSearch.value.trim().toLowerCase();
+        return state.members.filter((m) => {
+          const roleOk = memberFilter.value === 'all' || m.role === memberFilter.value;
+          const searchOk = !q || m.name.toLowerCase().includes(q);
+          return roleOk && searchOk;
+        });
+      }
+
+      function renderDashboard() {
+        const dateKey = getDateKey(activeDate.value || todayKey());
+        const rows = filteredMembers().map((m) => {
+          const p = computeMemberProgress(m.id, dateKey);
+          const status = p.done >= m.target ? '✅ Target tercapai' : '⏳ Belum tercapai';
+          const progressBar = `<div class="progress"><div style="width:${p.percent}%"></div></div><small>${p.done}/${p.total} (${p.percent}%)</small>`;
+          return `<tr>
+            <td><b>${m.name}</b><br/><small>${m.age ? `${m.age} th` : 'Usia -'} • ${m.phone || 'No WA -'}</small></td>
+            <td><span class="member-chip">${m.role}</span></td>
+            <td>${m.target}</td>
+            <td>${progressBar}</td>
+            <td>${status}</td>
+            <td><button class="btn-danger" data-remove="${m.id}">Hapus</button></td>
+          </tr>`;
+        }).join('');
+        dashboardRows.innerHTML = rows || `<tr><td colspan="6">Belum ada data anggota sesuai filter.</td></tr>`;
+
+        dashboardRows.querySelectorAll('[data-remove]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const member = state.members.find((m) => m.id === btn.getAttribute('data-remove'));
+            if (member && confirm(`Hapus ${member.name}?`)) removeMember(member.id);
           });
         });
+      }
 
-        membersContainer.querySelectorAll('[data-action="delete"]').forEach((btn) => {
+      function renderMemberList() {
+        if (!state.members.length) {
+          memberList.innerHTML = '<div class="timeline-item">Belum ada anggota.</div>';
+          return;
+        }
+        memberList.innerHTML = state.members.map((m) => `
+          <div class="timeline-item">
+            <div>
+              <b>${m.name}</b> <span class="member-chip">${m.role}</span>
+              <div><small>Usia: ${m.age || '-'} • WA: ${m.phone || '-'} • Target: ${m.target}</small></div>
+              <div><small>Catatan: ${m.note || '-'}</small></div>
+            </div>
+            <button class="btn-danger" data-remove-member="${m.id}">Hapus</button>
+          </div>
+        `).join('');
+
+        memberList.querySelectorAll('[data-remove-member]').forEach((btn) => {
           btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-id');
+            const id = btn.getAttribute('data-remove-member');
             const member = state.members.find((m) => m.id === id);
-            if (member && confirm(`Hapus anggota ${member.name}?`)) deleteMember(id);
-          });
-        });
-
-        membersContainer.querySelectorAll('[data-action="reset"]').forEach((btn) => {
-          btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-id');
-            state.logs[getLogKey(id, dateKey)] = TASKS.reduce((acc, task) => ((acc[task] = false), acc), {});
-            saveState(); renderMembers(); renderStats();
+            if (member && confirm(`Hapus ${member.name}?`)) removeMember(id);
           });
         });
       }
 
-      function renderStats() {
-        const dateKey = toDateKey(logDateInput.value || todayKey());
-        let totalChecks = 0; let completedMembers = 0;
-        state.members.forEach((member) => {
-          const done = Object.values(ensureLog(member.id, dateKey)).filter(Boolean).length;
-          totalChecks += done; if (done >= member.target) completedMembers += 1;
-        });
-        const possible = state.members.length * TASKS.length;
-        const percent = possible ? Math.round((totalChecks / possible) * 100) : 0;
-        const cards = [['Total Anggota', state.members.length], ['Checklist Selesai', `${totalChecks}/${possible}`], ['Pencapaian Harian', `${percent}%`], ['Capai Target', `${completedMembers} anggota`], ['Tanggal Aktif', dateKey]];
-        statsContainer.innerHTML = cards.map(([label, value]) => `<div class="stat"><span>${label}</span><b>${value}</b></div>`).join('');
+      function renderTaskTags() {
+        taskTags.innerHTML = state.tasks.map((task) => `
+          <span class="task-tag">${task}
+            ${DEFAULT_TASKS.includes(task) ? '' : `<button data-remove-task="${task}">x</button>`}
+          </span>
+        `).join('');
+        taskTags.querySelectorAll('[data-remove-task]').forEach((btn) => btn.addEventListener('click', () => removeTask(btn.getAttribute('data-remove-task'))));
       }
 
-      function renderAll() { renderMemberFilter(); renderMembers(); renderStats(); }
-
-      async function initPwaBuilder() {
-        if ('serviceWorker' in navigator) {
-          try { await navigator.serviceWorker.register('/sw.js'); }
-          catch { installStatus.textContent = 'Service worker gagal didaftarkan.'; }
+      function renderLogbook() {
+        const dateKey = getDateKey(activeDate.value || todayKey());
+        if (!state.members.length) {
+          logbookContainer.innerHTML = '<div class="timeline-item">Belum ada anggota. Tambahkan anggota dulu.</div>';
+          return;
         }
 
-        window.addEventListener('beforeinstallprompt', (event) => {
-          event.preventDefault();
-          deferredPrompt = event;
+        logbookContainer.innerHTML = state.members.map((m) => {
+          const log = ensureLog(m.id, dateKey);
+          const checks = state.tasks.map((task) => `<label style="display:inline-flex;align-items:center;gap:6px;margin:3px 8px 3px 0"><input type="checkbox" data-member="${m.id}" data-task="${task}" ${log.checks[task] ? 'checked' : ''}/> ${task}</label>`).join('');
+          const p = computeMemberProgress(m.id, dateKey);
+          return `<div class="timeline-item">
+            <div style="width:100%">
+              <b>${m.name}</b> <small>• ${m.role} • ${dateKey}</small>
+              <div style="margin-top:6px">${checks}</div>
+              <div style="margin-top:8px">
+                <label>Catatan Harian ${m.name}</label>
+                <textarea data-note="${m.id}" placeholder="Tulis catatan perilaku/progres spesifik...">${log.note || ''}</textarea>
+              </div>
+              <div class="progress"><div style="width:${p.percent}%"></div></div>
+              <small>Progress ${p.done}/${p.total} • ${p.percent}%</small>
+            </div>
+          </div>`;
+        }).join('');
+
+        logbookContainer.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
+          checkbox.addEventListener('change', (e) => {
+            const memberId = e.target.getAttribute('data-member');
+            const task = e.target.getAttribute('data-task');
+            const log = ensureLog(memberId, dateKey);
+            log.checks[task] = e.target.checked;
+            log.updatedAt = new Date().toISOString();
+            saveState();
+            renderHeroStats();
+            renderDashboard();
+            renderAnalytics();
+          });
+        });
+
+        logbookContainer.querySelectorAll('[data-note]').forEach((txt) => {
+          txt.addEventListener('blur', (e) => {
+            const memberId = e.target.getAttribute('data-note');
+            const log = ensureLog(memberId, dateKey);
+            log.note = e.target.value.trim();
+            log.updatedAt = new Date().toISOString();
+            saveState();
+            showToast('Catatan tersimpan.');
+          });
+        });
+      }
+
+      function calculateStreak(memberId) {
+        let streak = 0;
+        const sorted = Object.keys(state.logs)
+          .filter((k) => k.startsWith(`${memberId}__`))
+          .map((k) => k.split('__')[1])
+          .sort()
+          .reverse();
+        for (const d of sorted) {
+          const checks = Object.values(ensureLog(memberId, d).checks).filter(Boolean).length;
+          if (checks > 0) streak += 1;
+          else break;
+        }
+        return streak;
+      }
+
+      function renderAnalytics() {
+        const dateKey = getDateKey(activeDate.value || todayKey());
+        let totalDone = 0;
+        let totalPotential = state.members.length * state.tasks.length;
+
+        const leaderboard = state.members.map((m) => {
+          const memberKeys = Object.keys(state.logs).filter((k) => k.startsWith(`${m.id}__`));
+          let memberTotal = 0;
+          memberKeys.forEach((k) => {
+            memberTotal += Object.values(state.logs[k].checks || {}).filter(Boolean).length;
+          });
+          const avg = memberKeys.length ? (memberTotal / memberKeys.length).toFixed(1) : '0.0';
+          const todayDone = computeMemberProgress(m.id, dateKey).done;
+          totalDone += todayDone;
+          return { ...m, total: memberTotal, avg, streak: calculateStreak(m.id) };
+        }).sort((a,b) => b.total - a.total);
+
+        const overall = totalPotential ? Math.round((totalDone / totalPotential) * 100) : 0;
+        const best = leaderboard[0]?.name || '-';
+
+        analyticsStats.innerHTML = [
+          ['Rata-rata Global Hari Ini', `${overall}%`],
+          ['Top Performer', best],
+          ['Total Task Tercentang Hari Ini', totalDone],
+          ['Jumlah Data Log Tersimpan', Object.keys(state.logs).length]
+        ].map(([label, value]) => `<div class="card"><span>${label}</span><b>${value}</b></div>`).join('');
+
+        leaderboardRows.innerHTML = leaderboard.map((m, idx) => `<tr><td>${idx+1}</td><td>${m.name}</td><td>${m.total}</td><td>${m.avg}</td><td>${m.streak} hari</td></tr>`).join('') || '<tr><td colspan="5">Belum ada data.</td></tr>';
+      }
+
+      function exportData() {
+        const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `logbook-ramadhan-${todayKey()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function importData(file) {
+        const reader = new FileReader();
+        reader.onload = () => {
+          try {
+            const parsed = JSON.parse(reader.result);
+            if (!parsed || typeof parsed !== 'object') throw new Error('Invalid');
+            state.members = parsed.members || [];
+            state.logs = parsed.logs || {};
+            state.tasks = parsed.tasks?.length ? parsed.tasks : [...DEFAULT_TASKS];
+            state.theme = parsed.theme || 'light';
+            saveState();
+            applyTheme();
+            renderAll();
+            showToast('Import berhasil.');
+          } catch {
+            showToast('File JSON tidak valid.');
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      function resetAll() {
+        if (!confirm('Yakin reset semua data aplikasi?')) return;
+        state.members = [];
+        state.logs = {};
+        state.tasks = [...DEFAULT_TASKS];
+        saveState();
+        renderAll();
+      }
+
+      function applyTheme() {
+        const dark = state.theme === 'dark';
+        document.body.style.filter = dark ? 'invert(1) hue-rotate(180deg)' : '';
+      }
+
+      function toggleTheme() {
+        state.theme = state.theme === 'light' ? 'dark' : 'light';
+        applyTheme();
+        saveState();
+        showToast(`Mode ${state.theme} aktif.`);
+      }
+
+      function initTabs() {
+        document.querySelectorAll('.nav-btn').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const tab = btn.getAttribute('data-tab');
+            document.querySelectorAll('.nav-btn').forEach((n) => n.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('[data-panel]').forEach((p) => p.classList.toggle('hidden', p.getAttribute('data-panel') !== tab));
+          });
+        });
+      }
+
+      async function initPwa() {
+        if ('serviceWorker' in navigator) {
+          try {
+            await navigator.serviceWorker.register('/sw.js');
+            installStatus.textContent = 'PWA ready. Tunggu prompt install.';
+          } catch {
+            installStatus.textContent = 'Service Worker gagal aktif.';
+          }
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
           installBtn.disabled = false;
-          installStatus.textContent = 'Aplikasi siap di-install ke home screen.';
+          installStatus.textContent = 'Aplikasi siap di-install.';
         });
 
         window.addEventListener('appinstalled', () => {
           installBtn.disabled = true;
-          installStatus.textContent = 'Aplikasi berhasil di-install.';
+          installStatus.textContent = 'Aplikasi ter-install ✅';
         });
 
         installBtn.addEventListener('click', async () => {
@@ -213,18 +662,38 @@
           await deferredPrompt.userChoice;
           deferredPrompt = null;
           installBtn.disabled = true;
-          installStatus.textContent = 'Prompt install sudah ditampilkan.';
         });
       }
 
-      addMemberBtn.addEventListener('click', addMember);
-      logDateInput.addEventListener('change', renderAll);
-      memberFilterInput.addEventListener('change', renderMembers);
+      function renderAll() {
+        renderHeroStats();
+        renderDashboard();
+        renderMemberList();
+        renderTaskTags();
+        renderLogbook();
+        renderAnalytics();
+        saveState();
+      }
 
-      logDateInput.value = todayKey();
+      el('addMemberBtn').addEventListener('click', addMember);
+      el('clearMembersBtn').addEventListener('click', clearMembers);
+      el('addTaskBtn').addEventListener('click', addTask);
+      el('darkModeBtn').addEventListener('click', toggleTheme);
+      memberSearch.addEventListener('input', renderDashboard);
+      memberFilter.addEventListener('change', renderDashboard);
+      activeDate.addEventListener('change', () => { renderHeroStats(); renderDashboard(); renderLogbook(); renderAnalytics(); });
+
+      el('exportBtn').addEventListener('click', exportData);
+      el('importBtn').addEventListener('click', () => el('importFile').click());
+      el('importFile').addEventListener('change', (e) => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value = ''; });
+      el('resetAllBtn').addEventListener('click', resetAll);
+
+      activeDate.value = todayKey();
       loadState();
+      applyTheme();
+      initTabs();
+      initPwa();
       renderAll();
-      initPwaBuilder();
     </script>
   </body>
 </html>

@@ -1,28 +1,51 @@
-# Log Book Pioner Ramadhan
+# Log Book Pioner Ramadhan Pro
 
-Aplikasi ini adalah web app untuk catatan amalan harian Ramadhan keluarga, dan sekarang sudah ditambahkan **WPA Builder (PWA Install)** agar bisa di-install ke home screen.
+Aplikasi web base ini sudah di-upgrade menjadi versi **lebih detail, spesifik, dan modern (UI/UX)** untuk monitoring Ramadhan keluarga.
 
-## Fitur utama
-- Tambah/hapus anggota (nama, peran, target harian).
-- Checklist amalan harian per tanggal:
-  - Sahur
-  - Shalat 5 Waktu
-  - Tilawah
-  - Sedekah
-  - Tarawih
-- Filter tampilan per anggota.
-- Ringkasan progres harian.
-- Penyimpanan data otomatis dengan `localStorage`.
-- Dukungan PWA:
-  - Manifest web app
-  - Service worker cache app shell
-  - Tombol install app (jika browser mendukung)
+## Fitur Lengkap
+- **Dashboard modern** dengan statistik real-time harian:
+  - jumlah anggota aktif
+  - jumlah task aktif
+  - checklist harian tercapai
+  - persentase capaian
+  - jumlah anggota capai target
+- **Manajemen anggota detail**:
+  - nama, peran, usia, target poin harian, no WA, catatan khusus
+- **Logbook harian spesifik**:
+  - checklist default ibadah (shalat per waktu, tilawah, tarawih, dll)
+  - task custom tambahan sesuai kebutuhan keluarga
+  - catatan harian per anggota
+- **Analitik lanjutan**:
+  - leaderboard anggota
+  - total checklist per anggota
+  - rata-rata progres per hari
+  - streak keaktifan
+- **Pengaturan data**:
+  - export backup JSON
+  - import restore JSON
+  - reset semua data
+  - snapshot data read-only
+- **PWA / WPA Builder**:
+  - install app ke home screen
+  - dukungan service worker
+  - manifest + icon
+- **Tambahan UX**:
+  - navigasi tab (dashboard, anggota, logbook, analitik, settings)
+  - mode gelap
+  - toast notification
+  - pencarian + filter anggota
 
-## Jalankan lokal
+## Teknologi
+- Single-page app berbasis **HTML + CSS + Vanilla JS**.
+- Penyimpanan data lokal via `localStorage`.
+- Bisa dijalankan sebagai static site (termasuk Vercel).
+
+## Jalankan Lokal
 ```bash
 python3 -m http.server 4173
 ```
-Buka `http://localhost:4173`.
+Buka:
+- `http://localhost:4173`
 
 ## Deploy
-`vercel.json` tetap dipakai untuk memastikan route root menuju `index.html`.
+Konfigurasi `vercel.json` tetap dipakai agar route root menuju `index.html`.
