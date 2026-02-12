@@ -301,7 +301,66 @@ Route::middleware(['auth'])->group(function () {
 
 ---
 
-## 11) Fitur Lanjutan (Roadmap)
+## 11) Strategi Penyimpanan Data (Data Storage Plan)
+
+Supaya sistem stabil dan aman, penyimpanan data dibagi menjadi beberapa lapis:
+
+### A. Penyimpanan utama (transaksional)
+- Gunakan **MySQL** sebagai sumber data utama untuk:
+  - keluarga, user, role
+  - log ibadah harian
+  - rekap mingguan
+- Terapkan **InnoDB** untuk dukungan FK, transaksi, dan rollback.
+- Semua operasi tulis penting dibungkus transaksi database (`DB::transaction`) saat menyimpan multi-record.
+
+### B. Struktur indeks untuk performa
+Indeks minimum yang direkomendasikan:
+- `users.family_id`
+- `users.role`
+- `worship_logs.user_id`
+- `worship_logs.worship_category_id`
+- `worship_logs.date`
+- unique composite: `worship_logs (user_id, worship_category_id, date)`
+- unique composite: `weekly_summaries (user_id, week_number, year)`
+
+Tujuan: query dashboard, rekap harian, dan rekap mingguan tetap cepat meskipun data bertambah.
+
+### C. Penyimpanan file/non-relasional
+- Jika ada fitur **export PDF**, simpan file hasil export di:
+  - local storage: `storage/app/reports`
+  - atau object storage (S3-compatible) untuk production.
+- Simpan hanya path file pada database bila diperlukan (jangan simpan blob PDF langsung di tabel utama).
+
+### D. Retensi dan arsip data
+- Log ibadah bersifat histori, jadi **tidak dihapus otomatis** selama Ramadan berjalan.
+- Setelah periode tertentu (mis. > 1 tahun), data dapat dipindah ke tabel arsip atau bucket arsip untuk efisiensi.
+- Gunakan soft delete hanya untuk entitas yang perlu pemulihan (mis. user), bukan untuk log inti jika tidak dibutuhkan.
+
+### E. Backup & recovery
+- Backup database **harian** (minimal) + backup mingguan penuh.
+- Simpan backup di lokasi terpisah dari server aplikasi.
+- Lakukan uji restore berkala (mis. bulanan) untuk memastikan backup valid.
+- Tetapkan target recovery:
+  - **RPO** (kehilangan data maksimum) mis. 24 jam
+  - **RTO** (waktu pulih layanan) mis. 4 jam
+
+### F. Keamanan data saat disimpan
+- Password wajib hashed (`bcrypt`/`argon2id`), tidak pernah plaintext.
+- Data sensitif pada `.env` (DB password, API key) tidak boleh masuk git.
+- Aktifkan enkripsi disk/volume di level infrastruktur jika tersedia.
+- Batasi akses database hanya dari host aplikasi (firewall + network policy).
+
+### G. Multi-tenant scope (per keluarga)
+- Semua query data user/log wajib terfilter `family_id` dari user login.
+- Gunakan Global Scope atau Repository pattern agar scope keluarga konsisten dan tidak terlewat.
+
+### H. Monitoring kapasitas
+- Pantau ukuran tabel `worship_logs` dan growth rate per minggu.
+- Tambahkan alert jika storage server melewati ambang (mis. 80%).
+
+---
+
+## 12) Fitur Lanjutan (Roadmap)
 
 1. Reminder otomatis (scheduler/WhatsApp/email)
 2. Progress bar Ramadan hari 1-30
@@ -312,7 +371,7 @@ Route::middleware(['auth'])->group(function () {
 
 ---
 
-## 12) Prioritas Implementasi (Sprint)
+## 13) Prioritas Implementasi (Sprint)
 
 ### Sprint 1 (Fondasi)
 - Auth + role + family scope
@@ -331,7 +390,7 @@ Route::middleware(['auth'])->group(function () {
 
 ---
 
-## 13) Definition of Done (DoD)
+## 14) Definition of Done (DoD)
 
 Sebuah fitur dianggap selesai jika:
 - Lulus validasi role & family scope
@@ -339,4 +398,3 @@ Sebuah fitur dianggap selesai jika:
 - Tersedia unit/feature test minimal untuk skenario utama
 - UI responsif untuk mobile dan desktop
 - Tidak ada endpoint sensitif tanpa proteksi auth + CSRF
-
