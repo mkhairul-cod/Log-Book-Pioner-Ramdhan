@@ -1,28 +1,28 @@
 # Log Book Pioner Ramadhan
 
-Aplikasi ini sekarang sudah menjadi **web app langsung pakai** (tanpa blueprint-only).
+Aplikasi ini adalah web app untuk catatan amalan harian Ramadhan keluarga, dan sekarang sudah ditambahkan **WPA Builder (PWA Install)** agar bisa di-install ke home screen.
 
-## Fitur yang tersedia
-- Tambah anggota keluarga (nama, peran, target kebaikan per hari).
-- Checklist amalan harian Ramadhan:
+## Fitur utama
+- Tambah/hapus anggota (nama, peran, target harian).
+- Checklist amalan harian per tanggal:
   - Sahur
   - Shalat 5 Waktu
   - Tilawah
   - Sedekah
   - Tarawih
-- Pilih tanggal untuk pencatatan harian.
 - Filter tampilan per anggota.
-- Ringkasan progres harian (persentase, total checklist, anggota capai target).
-- Data tersimpan otomatis di browser menggunakan `localStorage`.
+- Ringkasan progres harian.
+- Penyimpanan data otomatis dengan `localStorage`.
+- Dukungan PWA:
+  - Manifest web app
+  - Service worker cache app shell
+  - Tombol install app (jika browser mendukung)
 
-## Cara menjalankan
-Karena ini web statis, cukup buka `index.html` atau deploy ke Vercel.
-
-### Jalankan lokal cepat
+## Jalankan lokal
 ```bash
 python3 -m http.server 4173
 ```
-Lalu buka: `http://localhost:4173`
+Buka `http://localhost:4173`.
 
-## Deploy ke Vercel
-Konfigurasi `vercel.json` sudah tersedia agar route root tetap mengarah ke `index.html`.
+## Deploy
+`vercel.json` tetap dipakai untuk memastikan route root menuju `index.html`.
