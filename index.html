@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log Book Pioner Ramadhan</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">☪</span>
+        <div>
+          <h1>Log Book Pioner Ramadhan</h1>
+          <p id="familyNameHeader">Belum ada keluarga aktif</p>
+        </div>
+      </div>
+      <nav class="menu">
+        <button data-view="dashboard" class="nav-btn active">Dashboard</button>
+        <button data-view="log" class="nav-btn">Catat Ibadah</button>
+        <button data-view="daily" class="nav-btn">Rekap Harian</button>
+        <button data-view="weekly" class="nav-btn">Rekap Mingguan</button>
+      </nav>
+      <div class="profile" id="profileInfo">Guest</div>
+    </header>
+
+    <main class="container">
+      <section id="authView" class="card">
+        <h2>Mulai Aplikasi</h2>
+        <p>Aplikasi ini langsung bisa dipakai tanpa backend (data tersimpan di browser/localStorage).</p>
+
+        <div class="grid-2">
+          <form id="createFamilyForm" class="panel">
+            <h3>Buat Keluarga & Admin Utama</h3>
+            <label>Nama Keluarga<input name="familyName" required placeholder="Keluarga Thaha" /></label>
+            <label>Nama Ayah<input name="name" required /></label>
+            <label>Email Ayah<input type="email" name="email" required /></label>
+            <label>Password<input type="password" name="password" required minlength="6" /></label>
+            <button type="submit">Buat dan Login</button>
+          </form>
+
+          <form id="loginForm" class="panel">
+            <h3>Login</h3>
+            <label>Email<input type="email" name="email" required /></label>
+            <label>Password<input type="password" name="password" required /></label>
+            <button type="submit">Masuk</button>
+            <p class="hint">Demo cepat: buat keluarga dulu jika belum ada data.</p>
+          </form>
+        </div>
+      </section>
+
+      <section id="appView" class="hidden">
+        <div id="dashboardView" class="view">
+          <div class="grid-cards" id="summaryCards"></div>
+          <div class="card">
+            <h3>Anggota Keluarga</h3>
+            <table>
+              <thead><tr><th>Nama</th><th>Role</th><th>Email</th></tr></thead>
+              <tbody id="membersTable"></tbody>
+            </table>
+          </div>
+
+          <div class="card" id="adminMemberCard">
+            <h3>Tambah Anggota</h3>
+            <form id="addMemberForm" class="inline-form">
+              <input name="name" placeholder="Nama" required />
+              <input name="email" type="email" placeholder="Email" required />
+              <input name="password" type="password" placeholder="Password" required minlength="6" />
+              <select name="role" required>
+                <option value="ibu">Ibu</option>
+                <option value="anak">Anak</option>
+              </select>
+              <button type="submit">Tambah</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="logView" class="view hidden">
+          <div class="card">
+            <h3>Form Catat Ibadah Harian</h3>
+            <form id="worshipForm" class="inline-form wrap">
+              <label>Tanggal<input type="date" name="date" required /></label>
+              <label>Target User<select name="userId" id="targetUser"></select></label>
+              <label>Subuh<input type="checkbox" name="subuh" /></label>
+              <label>Dzuhur<input type="checkbox" name="dzuhur" /></label>
+              <label>Ashar<input type="checkbox" name="ashar" /></label>
+              <label>Maghrib<input type="checkbox" name="maghrib" /></label>
+              <label>Isya<input type="checkbox" name="isya" /></label>
+              <label>Tarawih<input type="checkbox" name="tarawih" /></label>
+              <label>Puasa<input type="checkbox" name="puasa" /></label>
+              <label>Tadarus (halaman)<input type="number" min="0" step="1" name="tadarus" value="0" /></label>
+              <label>Catatan<input type="text" name="notes" maxlength="200" /></label>
+              <button type="submit">Simpan Log</button>
+            </form>
+          </div>
+        </div>
+
+        <div id="dailyView" class="view hidden">
+          <div class="card">
+            <h3>Rekap Harian</h3>
+            <table>
+              <thead>
+                <tr>
+                  <th>Tanggal</th><th>Nama</th><th>Shalat(5)</th><th>Tarawih</th><th>Tadarus</th><th>Puasa</th><th>Total Poin</th>
+                </tr>
+              </thead>
+              <tbody id="dailyTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="weeklyView" class="view hidden">
+          <div class="card">
+            <h3>Rekap Mingguan</h3>
+            <p>Total skor keluarga per minggu (otomatis dari log harian).</p>
+            <table>
+              <thead><tr><th>Minggu</th><th>Tahun</th><th>Total Skor Keluarga</th></tr></thead>
+              <tbody id="weeklyTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="logoutBtn" class="danger">Logout</button>
+          <button id="resetBtn" class="danger">Reset Semua Data</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>Log Book Pioner Ramadhan © <span id="year"></span> — “Ramadan adalah bulan peningkatan diri.”</p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
