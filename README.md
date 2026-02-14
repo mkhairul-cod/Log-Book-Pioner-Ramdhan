@@ -5,6 +5,7 @@ Aplikasi ini sekarang sudah dibuat lebih lengkap: **detail fitur, UI/UX modern, 
 ## Fitur Utama
 - Dashboard monitoring harian dengan statistik real-time.
 - Manajemen anggota detail (nama, peran, usia, target, WhatsApp, catatan khusus).
+- Validasi data anggota (nama unik, format WA, rentang usia) + rekomendasi target otomatis berbasis peran/usia.
 - Logbook harian per anggota dengan:
   - checklist ibadah default
   - task custom
@@ -20,6 +21,7 @@ Aplikasi ini sekarang sudah dibuat lebih lengkap: **detail fitur, UI/UX modern, 
   - import JSON
   - reset semua data
   - snapshot data read-only
+  - reminder notifikasi terjadwal (pagi/sore/malam) + tes notifikasi
 - PWA/WPA Builder:
   - install app
   - service worker

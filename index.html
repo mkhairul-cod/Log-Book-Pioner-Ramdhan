@@ -286,6 +286,18 @@
               <input id="importFile" type="file" accept="application/json" class="hidden" />
               <button id="resetAllBtn" class="btn-danger">Reset Semua</button>
             </div>
+            <div class="card" style="margin-top:10px">
+              <span>Reminder otomatis (notification)</span>
+              <div class="grid-3" style="margin-top:8px">
+                <div><label for="reminderMorning">Pagi</label><input id="reminderMorning" type="time" value="04:30" /></div>
+                <div><label for="reminderEvening">Sore</label><input id="reminderEvening" type="time" value="18:30" /></div>
+                <div><label for="reminderNight">Malam</label><input id="reminderNight" type="time" value="20:00" /></div>
+              </div>
+              <div class="row-actions">
+                <button id="enableReminderBtn" class="btn-soft">Aktifkan Reminder</button>
+                <button id="testReminderBtn" class="btn-soft">Tes Notifikasi</button>
+              </div>
+            </div>
             <div style="margin-top:10px">
               <label>Snapshot data (read only)</label>
               <textarea id="snapshot" readonly></textarea>
@@ -300,7 +312,7 @@
     <script>
       const STORAGE_KEY = 'ramadhan-logbook-pro-v4';
       const DEFAULT_TASKS = ['Sahur','Shalat Subuh','Shalat Dzuhur','Shalat Ashar','Shalat Maghrib','Shalat Isya','Tilawah','Sedekah','Tarawih'];
-      const state = { members: [], logs: {}, tasks: [...DEFAULT_TASKS], theme: 'light' };
+      const state = { members: [], logs: {}, tasks: [...DEFAULT_TASKS], theme: 'light', reminders: { enabled: false, times: ['04:30','18:30','20:00'], sentToday: {} } };
       let deferredPrompt = null;
 
       const el = (id) => document.getElementById(id);
@@ -319,6 +331,9 @@
       const installBtn = el('installBtn');
       const installStatus = el('installStatus');
       const toast = el('toast');
+      const reminderMorning = el('reminderMorning');
+      const reminderEvening = el('reminderEvening');
+      const reminderNight = el('reminderNight');
 
       function toastMsg(msg) {
         toast.textContent = msg;
@@ -339,6 +354,7 @@
           state.logs = parsed.logs || {};
           state.tasks = parsed.tasks?.length ? parsed.tasks : [...DEFAULT_TASKS];
           state.theme = parsed.theme || 'light';
+          state.reminders = parsed.reminders || state.reminders;
         } catch {
           localStorage.removeItem(STORAGE_KEY);
         }
@@ -362,21 +378,51 @@
         return state.logs[key];
       }
 
+      function recommendedTarget(role, age) {
+        if (role === 'Anak') return age && age < 10 ? 3 : 5;
+        if (role === 'Lainnya') return 4;
+        return 7;
+      }
+
+      function normalizePhone(phone) {
+        return phone.replace(/[^\d]/g, '');
+      }
+
+      function validateMemberInput(name, phone, role, age) {
+        if (!name) return 'Nama wajib diisi';
+        const duplicate = state.members.some((m) => m.name.toLowerCase() === name.toLowerCase());
+        if (duplicate) return 'Nama sudah ada, gunakan nama berbeda';
+        if (phone && !/^08\d{8,13}$/.test(phone)) return 'Format WhatsApp tidak valid (contoh: 081234567890)';
+        if (age && (age < 1 || age > 100)) return 'Usia harus antara 1 - 100';
+        const suggested = recommendedTarget(role, age);
+        const currentTarget = Number(el('target').value || 0);
+        if (!currentTarget || currentTarget < 1) el('target').value = String(suggested);
+        return null;
+      }
+
       function addMember() {
         const name = el('name').value.trim();
-        if (!name) return toastMsg('Nama wajib diisi');
+        const role = el('role').value;
+        const age = Number(el('age').value || 0);
+        const phone = normalizePhone(el('phone').value.trim());
+        const error = validateMemberInput(name, phone, role, age);
+        if (error) return toastMsg(error);
+
+        const targetInput = Number(el('target').value || 0);
+        const target = Math.max(1, targetInput || recommendedTarget(role, age));
+
         state.members.push({
           id: crypto.randomUUID(),
           name,
-          role: el('role').value,
-          age: Number(el('age').value || 0),
-          target: Math.max(1, Number(el('target').value || 1)),
-          phone: el('phone').value.trim(),
+          role,
+          age,
+          target,
+          phone,
           note: el('note').value.trim(),
           createdAt: new Date().toISOString()
         });
         ['name','age','phone','note'].forEach((id) => (el(id).value = ''));
-        el('target').value = '5';
+        el('target').value = String(recommendedTarget('Anak', 10));
         renderAll();
         toastMsg('Anggota ditambahkan');
       }
@@ -651,6 +697,7 @@
             state.logs = parsed.logs || {};
             state.tasks = parsed.tasks?.length ? parsed.tasks : [...DEFAULT_TASKS];
             state.theme = parsed.theme || 'light';
+          state.reminders = parsed.reminders || state.reminders;
             applyTheme();
             renderAll();
             toastMsg('Import berhasil');
@@ -678,6 +725,49 @@
         applyTheme();
         saveState();
       }
+      function syncReminderInputs() {
+        reminderMorning.value = state.reminders.times[0] || '04:30';
+        reminderEvening.value = state.reminders.times[1] || '18:30';
+        reminderNight.value = state.reminders.times[2] || '20:00';
+      }
+
+      async function enableReminders() {
+        if (!('Notification' in window)) return toastMsg('Browser tidak mendukung notifikasi');
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') return toastMsg('Izin notifikasi ditolak');
+        state.reminders.enabled = true;
+        state.reminders.times = [reminderMorning.value, reminderEvening.value, reminderNight.value];
+        saveState();
+        toastMsg('Reminder aktif');
+      }
+
+      function sendReminder(title, body) {
+        if ('Notification' in window && Notification.permission === 'granted') {
+          new Notification(title, { body, icon: '/icon.svg' });
+        }
+      }
+
+      function checkReminderTick() {
+        if (!state.reminders.enabled) return;
+        const now = new Date();
+        const hhmm = now.toTimeString().slice(0,5);
+        const today = todayKey();
+        if (!state.reminders.sentToday[today]) state.reminders.sentToday[today] = {};
+        state.reminders.times.forEach((time, idx) => {
+          if (time === hhmm && !state.reminders.sentToday[today][time]) {
+            state.reminders.sentToday[today][time] = true;
+            const labels = ['pagi', 'sore', 'malam'];
+            sendReminder('Log Book Ramadhan', `Waktu check-in ${labels[idx]}. Jangan lupa update logbook hari ini.`);
+            saveState();
+          }
+        });
+      }
+
+      function testReminder() {
+        sendReminder('Tes Reminder', 'Notifikasi berhasil. Reminder siap digunakan.');
+        toastMsg('Tes notifikasi dikirim');
+      }
+
 
       function initTabs() {
         document.querySelectorAll('.nav-btn').forEach((btn) => {
@@ -728,6 +818,7 @@
         renderTaskTags();
         renderLogbook();
         renderAnalytics();
+        syncReminderInputs();
         saveState();
       }
 
@@ -742,6 +833,16 @@
       el('importBtn').addEventListener('click', () => el('importFile').click());
       el('importFile').addEventListener('change', (e) => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value = ''; });
       el('resetAllBtn').addEventListener('click', resetAll);
+      el('enableReminderBtn').addEventListener('click', enableReminders);
+      el('testReminderBtn').addEventListener('click', testReminder);
+      el('role').addEventListener('change', () => {
+        const age = Number(el('age').value || 0);
+        el('target').value = String(recommendedTarget(el('role').value, age));
+      });
+      el('age').addEventListener('input', () => {
+        const age = Number(el('age').value || 0);
+        el('target').value = String(recommendedTarget(el('role').value, age));
+      });
 
       activeDate.value = todayKey();
       loadState();
@@ -749,6 +850,7 @@
       initTabs();
       initPwa();
       renderAll();
+      setInterval(checkReminderTick, 30000);
     </script>
   </body>
 </html>
