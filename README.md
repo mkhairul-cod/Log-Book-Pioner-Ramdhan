@@ -14,6 +14,7 @@ Aplikasi ini sekarang sudah dibuat lebih lengkap: **detail fitur, UI/UX modern, 
   - rata-rata per hari
   - leaderboard
   - streak aktivitas
+  - saran otomatis berbasis performa harian
 - Pengaturan data:
   - export JSON
   - import JSON

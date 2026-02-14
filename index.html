@@ -258,13 +258,17 @@
 
           <section class="panel hidden" data-panel="analytics">
             <h2>Analitik Progres</h2>
-            <p class="sub">Lihat performa global, leaderboard, dan streak.</p>
+            <p class="sub">Lihat performa global, leaderboard, streak, dan saran perbaikan otomatis.</p>
             <div id="analyticsStats" class="stats"></div>
             <div class="table-wrap" style="margin-top:10px">
               <table>
                 <thead><tr><th>#</th><th>Anggota</th><th>Total Checklist</th><th>Rata-rata/Hari</th><th>Streak</th></tr></thead>
                 <tbody id="leaderboardRows"></tbody>
               </table>
+            </div>
+            <div style="margin-top:10px">
+              <label>Saran otomatis (berdasarkan data hari aktif)</label>
+              <div id="suggestionList" class="timeline"></div>
             </div>
           </section>
 
@@ -307,6 +311,7 @@
       const heroStats = el('heroStats');
       const analyticsStats = el('analyticsStats');
       const leaderboardRows = el('leaderboardRows');
+      const suggestionList = el('suggestionList');
       const memberList = el('memberList');
       const taskTags = el('taskTags');
       const logbookContainer = el('logbookContainer');
@@ -544,6 +549,40 @@
         return s;
       }
 
+      function buildSuggestions(leaderboard, dailyPercent, dateKey) {
+        const suggestions = [];
+
+        if (!state.members.length) {
+          suggestions.push('Tambahkan minimal 2 anggota supaya analitik keluarga lebih bermakna.');
+          return suggestions;
+        }
+
+        if (dailyPercent < 40) {
+          suggestions.push(`Progress ${dateKey} masih ${dailyPercent}%. Saran: aktifkan target mikro (3 task utama) untuk menaikkan konsistensi.`);
+        } else if (dailyPercent < 70) {
+          suggestions.push(`Progress ${dateKey} sudah ${dailyPercent}%. Saran: tambah pengingat setelah Maghrib untuk task yang belum dicentang.`);
+        } else {
+          suggestions.push(`Progress ${dateKey} sangat baik (${dailyPercent}%). Pertahankan ritme dengan review catatan harian sebelum tidur.`);
+        }
+
+        const lowStreak = leaderboard.filter((m) => m.streak <= 1).slice(0, 3);
+        if (lowStreak.length) {
+          suggestions.push(`Fokus pendampingan untuk: ${lowStreak.map((m) => m.name).join(', ')} karena streak masih rendah.`);
+        }
+
+        const belowTarget = state.members.filter((m) => memberProgress(m.id, dateKey).done < m.target);
+        if (belowTarget.length) {
+          suggestions.push(`Anggota belum capai target hari ini: ${belowTarget.map((m) => m.name).join(', ')}. Saran: jadwalkan sesi check-in 10 menit.`);
+        }
+
+        const hasCustom = state.tasks.some((t) => !DEFAULT_TASKS.includes(t));
+        if (!hasCustom) {
+          suggestions.push('Tambahkan 1-2 task custom (mis. Murajaah, Qiyamul Lail) agar program keluarga lebih spesifik.');
+        }
+
+        return suggestions;
+      }
+
       function renderAnalytics() {
         const dateKey = toDateKey(activeDate.value || todayKey());
         let totalToday = 0;
@@ -568,6 +607,9 @@
         animateCounters(analyticsStats);
 
         leaderboardRows.innerHTML = result.map((m, i) => `<tr><td>${i + 1}</td><td>${m.name}</td><td>${m.total}</td><td>${m.avg}</td><td>${m.streak} hari</td></tr>`).join('') || '<tr><td colspan="5">Belum ada data</td></tr>';
+
+        const suggestions = buildSuggestions(result, dailyPercent, dateKey);
+        suggestionList.innerHTML = suggestions.map((msg, i) => `<div class="timeline-item"><div><b>Saran ${i + 1}</b><br/><small>${msg}</small></div></div>`).join('');
       }
 
       function animateCounters(container) {
