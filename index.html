@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,98 +9,162 @@
     <title>Log Book Pioner Ramadhan Pro</title>
     <style>
       :root {
-        --bg: #f4f7fb;
+        --bg: #f3f7fb;
         --surface: #ffffff;
+        --surface-2: #f8fafc;
         --text: #0f172a;
         --muted: #64748b;
+        --line: #dbe3ef;
         --primary: #0f766e;
-        --primary-soft: #ccfbf1;
+        --primary-2: #0ea5e9;
         --danger: #be123c;
-        --warning: #ca8a04;
-        --line: #e2e8f0;
-        --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+        --shadow: 0 16px 40px rgba(15, 23, 42, 0.09);
+      }
+
+      html[data-theme='dark'] {
+        --bg: #020617;
+        --surface: #0b1220;
+        --surface-2: #111827;
+        --text: #e2e8f0;
+        --muted: #94a3b8;
+        --line: #1e293b;
+        --primary: #14b8a6;
+        --primary-2: #38bdf8;
+        --danger: #fb7185;
+        --shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
       }
 
       * { box-sizing: border-box; }
-      body { margin: 0; font-family: Inter, Segoe UI, Arial, sans-serif; background: radial-gradient(circle at top right, #e0f2fe, #f8fafc 45%), var(--bg); color: var(--text); }
+      body {
+        margin: 0;
+        font-family: Inter, Segoe UI, Arial, sans-serif;
+        background: radial-gradient(circle at 90% -10%, rgba(14, 165, 233, 0.14), transparent 36%), var(--bg);
+        color: var(--text);
+      }
+
+      .bg-blob {
+        position: fixed;
+        width: 320px;
+        height: 320px;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.16;
+        z-index: -1;
+        animation: floatBlob 11s ease-in-out infinite;
+      }
+      .bg-blob.one { background: #14b8a6; top: -80px; right: -60px; }
+      .bg-blob.two { background: #38bdf8; bottom: -100px; left: -80px; animation-delay: 1.7s; }
+
+      @keyframes floatBlob {
+        0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+        50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
+      }
+
       .app { max-width: 1320px; margin: 0 auto; padding: 18px; }
 
       .hero {
-        background: linear-gradient(135deg, #0f766e, #155e75);
         border-radius: 20px;
-        color: #fff;
         padding: 18px;
+        color: #fff;
+        background: linear-gradient(130deg, #0f766e, #0ea5e9);
         box-shadow: var(--shadow);
         display: grid;
-        gap: 14px;
+        gap: 12px;
+        animation: fadeUp .45s ease;
       }
+      .hero-top { display: flex; justify-content: space-between; gap: 14px; flex-wrap: wrap; }
+      .hero h1 { margin: 0; font-size: clamp(22px, 3vw, 34px); }
+      .hero p { margin: 6px 0 0; color: #e0f2fe; }
 
-      .hero-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; }
-      .hero h1 { margin: 0; font-size: clamp(22px, 3vw, 32px); }
-      .hero p { margin: 6px 0 0; color: #dbeafe; }
-      .pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,.28); background: rgba(255,255,255,.1); padding: 7px 12px; border-radius: 999px; font-size: 12px; }
+      .top-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+      .pill { border: 1px solid rgba(255,255,255,.35); border-radius: 999px; padding: 6px 11px; background: rgba(255,255,255,.13); font-size: 12px; }
 
-      .top-actions { display: flex; gap: 8px; flex-wrap: wrap; }
       button, input, select, textarea { font: inherit; }
       button {
-        border: 0;
         border-radius: 10px;
+        border: 0;
         cursor: pointer;
         padding: 10px 12px;
-        font-weight: 600;
+        transition: transform .16s ease, opacity .16s ease, background .2s ease;
       }
-      .btn-primary { background: #0f766e; color: #fff; }
-      .btn-soft { background: #fff; color: #0f172a; border: 1px solid #cbd5e1; }
+      button:hover { transform: translateY(-1px); }
+      button:active { transform: translateY(0); }
+      button[disabled] { cursor: not-allowed; opacity: .65; }
+      .btn-hero { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.34); }
+      .btn-primary { background: var(--primary); color: #fff; }
+      .btn-soft { background: var(--surface-2); color: var(--text); border: 1px solid var(--line); }
       .btn-danger { background: var(--danger); color: #fff; }
-      .btn-warning { background: var(--warning); color: #fff; }
-      .btn-hero { background: rgba(255,255,255,.14); color: #fff; border: 1px solid rgba(255,255,255,.32); }
 
-      .layout { display: grid; grid-template-columns: 280px 1fr; gap: 16px; margin-top: 16px; }
+      .layout { margin-top: 16px; display: grid; grid-template-columns: 280px 1fr; gap: 16px; }
       .sidebar, .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); }
-      .sidebar { padding: 12px; height: fit-content; position: sticky; top: 12px; }
-      .nav-btn { width: 100%; text-align: left; background: transparent; color: var(--text); border: 1px solid transparent; margin-bottom: 6px; }
-      .nav-btn.active { background: var(--primary-soft); border-color: #99f6e4; color: #134e4a; }
+      .sidebar { padding: 12px; height: fit-content; position: sticky; top: 10px; animation: fadeUp .5s ease; }
+      .nav-btn { width: 100%; text-align: left; border: 1px solid transparent; background: transparent; color: var(--text); margin-bottom: 7px; }
+      .nav-btn.active { border-color: #67e8f9; background: color-mix(in oklab, var(--primary) 18%, transparent); }
+
       .main { display: grid; gap: 16px; }
+      .panel { padding: 14px; animation: fadeUp .45s ease; }
+      .panel h2 { margin: 0 0 10px; }
+      .sub { margin: -4px 0 10px; color: var(--muted); font-size: 13px; }
 
-      .panel { padding: 14px; }
-      .panel h2 { margin: 0 0 10px; font-size: 20px; }
-      .sub { color: var(--muted); font-size: 13px; margin-top: -6px; margin-bottom: 10px; }
-
-      .stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
-      .card { background: linear-gradient(180deg, #fff, #f8fafc); border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px; }
+      .stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); }
+      .card {
+        background: linear-gradient(180deg, var(--surface), var(--surface-2));
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 11px;
+      }
       .card span { color: var(--muted); font-size: 12px; }
-      .card b { display: block; font-size: 26px; margin-top: 4px; }
+      .card b { display: block; font-size: 24px; margin-top: 5px; }
 
-      .grid-2 { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-      .grid-3 { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+      .grid-2 { display: grid; gap: 11px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+      .grid-3 { display: grid; gap: 11px; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
 
-      label { display: block; font-size: 12px; font-weight: 600; color: #334155; margin-bottom: 6px; }
-      input, select, textarea { width: 100%; border: 1px solid #cbd5e1; border-radius: 10px; padding: 9px 11px; background: #fff; }
-      textarea { min-height: 90px; resize: vertical; }
+      label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 5px; color: var(--muted); }
+      input, select, textarea {
+        width: 100%;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--text);
+        border-radius: 10px;
+        padding: 9px 11px;
+      }
+      textarea { min-height: 94px; resize: vertical; }
       .row-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
 
-      .table-wrap { overflow: auto; border: 1px solid #e2e8f0; border-radius: 12px; }
-      table { width: 100%; border-collapse: collapse; min-width: 940px; }
-      th, td { border-bottom: 1px solid #e2e8f0; padding: 8px; vertical-align: top; text-align: left; }
-      th { background: #f8fafc; font-size: 12px; color: #475569; }
-      .member-chip { display: inline-block; padding: 4px 8px; border-radius: 999px; font-size: 12px; background: #ecfeff; color: #155e75; border: 1px solid #bae6fd; }
-      .progress { height: 8px; border-radius: 999px; background: #e2e8f0; overflow: hidden; margin-top: 6px; }
-      .progress > div { height: 100%; background: linear-gradient(90deg, #14b8a6, #0ea5e9); }
+      .table-wrap { border: 1px solid var(--line); border-radius: 12px; overflow: auto; }
+      table { width: 100%; border-collapse: collapse; min-width: 920px; }
+      th, td { border-bottom: 1px solid var(--line); padding: 8px; text-align: left; vertical-align: top; }
+      th { background: var(--surface-2); font-size: 12px; color: var(--muted); }
 
-      .task-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-      .task-tag { display: inline-flex; align-items: center; gap: 7px; border: 1px solid #dbeafe; background: #eff6ff; color: #1e3a8a; border-radius: 999px; padding: 5px 10px; font-size: 12px; }
-      .task-tag button { padding: 2px 7px; border-radius: 999px; border: 0; background: #dbeafe; color: #1e3a8a; cursor: pointer; }
+      .member-chip { display: inline-block; border: 1px solid #99f6e4; background: #ecfeff; color: #155e75; border-radius: 999px; padding: 4px 8px; font-size: 12px; }
+      html[data-theme='dark'] .member-chip { background: #062531; color: #67e8f9; border-color: #155e75; }
+
+      .progress { margin-top: 6px; height: 8px; background: color-mix(in oklab, var(--line) 75%, transparent); border-radius: 999px; overflow: hidden; }
+      .progress > div {
+        height: 100%;
+        width: 0;
+        background: linear-gradient(90deg, var(--primary), var(--primary-2));
+        transition: width .45s ease;
+      }
 
       .timeline { display: grid; gap: 8px; }
-      .timeline-item { border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; display: flex; justify-content: space-between; gap: 10px; }
-      .timeline-item small { color: var(--muted); }
+      .timeline-item { border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: flex; justify-content: space-between; gap: 10px; background: var(--surface-2); }
+      .task-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+      .task-tag { display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--line); border-radius: 999px; padding: 5px 10px; background: var(--surface-2); }
+      .task-tag button { border-radius: 999px; padding: 1px 8px; }
 
       .hidden { display: none !important; }
       .toast {
-        position: fixed; right: 14px; bottom: 14px; background: #0f172a; color: #fff; border-radius: 10px; padding: 10px 12px;
-        opacity: 0; transform: translateY(20px); transition: .25s ease; pointer-events: none; z-index: 999;
+        position: fixed; right: 14px; bottom: 14px; z-index: 1000;
+        background: #0f172a; color: #fff; border-radius: 10px; padding: 10px 12px;
+        transform: translateY(14px); opacity: 0; pointer-events: none; transition: .24s ease;
       }
       .toast.show { opacity: 1; transform: translateY(0); }
+
+      @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(12px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
 
       @media (max-width: 980px) {
         .layout { grid-template-columns: 1fr; }
@@ -109,12 +173,15 @@
     </style>
   </head>
   <body>
+    <div class="bg-blob one"></div>
+    <div class="bg-blob two"></div>
+
     <div class="app">
       <header class="hero">
         <div class="hero-top">
           <div>
             <h1>Log Book Pioner Ramadhan Pro</h1>
-            <p>Versi detail & spesifik: manajemen anggota, checklist custom, analitik, catatan harian, export/import, dan PWA install.</p>
+            <p>UI/UX modern + animasi + fitur detail untuk monitoring amalan keluarga selama Ramadhan.</p>
           </div>
           <div class="top-actions">
             <button id="installBtn" class="btn-hero" disabled>Install App</button>
@@ -122,7 +189,7 @@
             <span id="installStatus" class="pill">PWA: menunggu dukungan browser</span>
           </div>
         </div>
-        <div class="stats" id="heroStats"></div>
+        <div id="heroStats" class="stats"></div>
       </header>
 
       <div class="layout">
@@ -131,22 +198,16 @@
           <button class="nav-btn" data-tab="members">👥 Anggota</button>
           <button class="nav-btn" data-tab="logbook">📝 Logbook Harian</button>
           <button class="nav-btn" data-tab="analytics">📈 Analitik</button>
-          <button class="nav-btn" data-tab="settings">⚙️ Pengaturan & Data</button>
+          <button class="nav-btn" data-tab="settings">⚙️ Data & Localhost</button>
         </aside>
 
         <main class="main">
           <section class="panel" data-panel="dashboard">
             <h2>Dashboard Harian</h2>
-            <p class="sub">Ringkasan cepat untuk tanggal aktif.</p>
+            <p class="sub">Filter data dan pantau progres harian seluruh anggota.</p>
             <div class="grid-3">
-              <div>
-                <label for="activeDate">Tanggal aktif</label>
-                <input id="activeDate" type="date" />
-              </div>
-              <div>
-                <label for="memberSearch">Cari anggota</label>
-                <input id="memberSearch" type="text" placeholder="Nama anggota..." />
-              </div>
+              <div><label for="activeDate">Tanggal aktif</label><input id="activeDate" type="date" /></div>
+              <div><label for="memberSearch">Cari anggota</label><input id="memberSearch" type="text" placeholder="Ketik nama anggota..." /></div>
               <div>
                 <label for="memberFilter">Filter peran</label>
                 <select id="memberFilter">
@@ -160,7 +221,7 @@
             </div>
             <div class="table-wrap" style="margin-top:10px">
               <table>
-                <thead><tr><th>Anggota</th><th>Peran</th><th>Target</th><th>Progress Hari Ini</th><th>Status</th><th>Aksi</th></tr></thead>
+                <thead><tr><th>Anggota</th><th>Peran</th><th>Target</th><th>Progress</th><th>Status</th><th>Aksi</th></tr></thead>
                 <tbody id="dashboardRows"></tbody>
               </table>
             </div>
@@ -168,80 +229,61 @@
 
           <section class="panel hidden" data-panel="members">
             <h2>Manajemen Anggota Detail</h2>
-            <p class="sub">Setiap anggota bisa punya profil lengkap untuk monitoring lebih spesifik.</p>
+            <p class="sub">Simpan profil lengkap agar monitoring lebih spesifik.</p>
             <div class="grid-2">
-              <div>
-                <label>Nama Lengkap</label>
-                <input id="name" type="text" placeholder="Contoh: Ahmad Fauzi" />
-              </div>
-              <div>
-                <label>Peran</label>
-                <select id="role"><option>Ayah</option><option>Ibu</option><option>Anak</option><option>Lainnya</option></select>
-              </div>
-              <div>
-                <label>Usia</label>
-                <input id="age" type="number" min="1" placeholder="Contoh: 14" />
-              </div>
-              <div>
-                <label>Target Poin Harian</label>
-                <input id="target" type="number" min="1" value="5" />
-              </div>
-              <div>
-                <label>No. WhatsApp</label>
-                <input id="phone" type="text" placeholder="08xxxxxxxxxx" />
-              </div>
-              <div>
-                <label>Catatan Khusus Anggota</label>
-                <input id="note" type="text" placeholder="Contoh: fokus tilawah 2 juz" />
-              </div>
+              <div><label>Nama</label><input id="name" type="text" placeholder="Ahmad Fauzi" /></div>
+              <div><label>Peran</label><select id="role"><option>Ayah</option><option>Ibu</option><option>Anak</option><option>Lainnya</option></select></div>
+              <div><label>Usia</label><input id="age" type="number" min="1" /></div>
+              <div><label>Target Poin Harian</label><input id="target" type="number" min="1" value="5" /></div>
+              <div><label>No WhatsApp</label><input id="phone" type="text" placeholder="08xxxxxxxxxx" /></div>
+              <div><label>Catatan Khusus</label><input id="note" type="text" placeholder="Fokus tilawah 2 juz" /></div>
             </div>
             <div class="row-actions">
               <button id="addMemberBtn" class="btn-primary">Tambah Anggota</button>
               <button id="clearMembersBtn" class="btn-danger">Hapus Semua Anggota</button>
             </div>
-            <div id="memberList" style="margin-top:10px" class="timeline"></div>
+            <div id="memberList" class="timeline" style="margin-top:10px"></div>
           </section>
 
           <section class="panel hidden" data-panel="logbook">
-            <h2>Logbook Harian Detail & Spesifik</h2>
-            <p class="sub">Checklist default + custom task + catatan harian setiap anggota.</p>
+            <h2>Logbook Detail</h2>
+            <p class="sub">Checklist task default + task custom + catatan harian per anggota.</p>
             <div class="grid-2">
-              <div>
-                <label>Tambah Task Custom</label>
-                <input id="newTaskInput" type="text" placeholder="Contoh: Qiyamul Lail" />
-              </div>
-              <div>
-                <label>&nbsp;</label>
-                <button id="addTaskBtn" class="btn-soft">Tambah Task Custom</button>
-              </div>
+              <div><label>Task Custom Baru</label><input id="newTaskInput" type="text" placeholder="Qiyamul Lail" /></div>
+              <div><label>&nbsp;</label><button id="addTaskBtn" class="btn-soft">Tambah Task</button></div>
             </div>
             <div id="taskTags" class="task-tags" style="margin-top:8px"></div>
             <div id="logbookContainer" class="timeline" style="margin-top:10px"></div>
           </section>
 
           <section class="panel hidden" data-panel="analytics">
-            <h2>Analitik Progres Ramadhan</h2>
-            <p class="sub">Metrik ringkas: rata-rata pencapaian, streak aktif, dan peringkat anggota.</p>
-            <div class="stats" id="analyticsStats"></div>
+            <h2>Analitik Progres</h2>
+            <p class="sub">Lihat performa global, leaderboard, dan streak.</p>
+            <div id="analyticsStats" class="stats"></div>
             <div class="table-wrap" style="margin-top:10px">
               <table>
-                <thead><tr><th>Peringkat</th><th>Anggota</th><th>Total Checklist</th><th>Rata-rata / Hari</th><th>Streak</th></tr></thead>
+                <thead><tr><th>#</th><th>Anggota</th><th>Total Checklist</th><th>Rata-rata/Hari</th><th>Streak</th></tr></thead>
                 <tbody id="leaderboardRows"></tbody>
               </table>
             </div>
           </section>
 
           <section class="panel hidden" data-panel="settings">
-            <h2>Pengaturan & Backup Data</h2>
-            <p class="sub">Lindungi data logbook: export JSON, import JSON, reset data, dan utilitas.</p>
+            <h2>Data, Backup, dan Menjalankan di Localhost</h2>
+            <p class="sub">Aplikasi ini langsung bisa dipakai di localhost dengan perintah di bawah.</p>
+            <div class="card" style="margin-bottom:10px">
+              <span>Perintah localhost</span>
+              <b style="font-size:16px">python3 -m http.server 4173</b>
+              <span>Lalu akses: http://localhost:4173</span>
+            </div>
             <div class="row-actions">
               <button id="exportBtn" class="btn-primary">Export JSON</button>
               <button id="importBtn" class="btn-soft">Import JSON</button>
               <input id="importFile" type="file" accept="application/json" class="hidden" />
-              <button id="resetAllBtn" class="btn-danger">Reset Semua Data</button>
+              <button id="resetAllBtn" class="btn-danger">Reset Semua</button>
             </div>
             <div style="margin-top:10px">
-              <label>Snapshot data (read-only)</label>
+              <label>Snapshot data (read only)</label>
               <textarea id="snapshot" readonly></textarea>
             </div>
           </section>
@@ -252,16 +294,9 @@
     <div id="toast" class="toast"></div>
 
     <script>
-      const STORAGE_KEY = 'ramadhan-logbook-pro-v3';
-      const DEFAULT_TASKS = ['Sahur', 'Shalat Subuh', 'Shalat Dzuhur', 'Shalat Ashar', 'Shalat Maghrib', 'Shalat Isya', 'Tilawah', 'Sedekah', 'Tarawih'];
-
-      const state = {
-        members: [],
-        logs: {},
-        tasks: [...DEFAULT_TASKS],
-        theme: 'light'
-      };
-
+      const STORAGE_KEY = 'ramadhan-logbook-pro-v4';
+      const DEFAULT_TASKS = ['Sahur','Shalat Subuh','Shalat Dzuhur','Shalat Ashar','Shalat Maghrib','Shalat Isya','Tilawah','Sedekah','Tarawih'];
+      const state = { members: [], logs: {}, tasks: [...DEFAULT_TASKS], theme: 'light' };
       let deferredPrompt = null;
 
       const el = (id) => document.getElementById(id);
@@ -272,23 +307,23 @@
       const heroStats = el('heroStats');
       const analyticsStats = el('analyticsStats');
       const leaderboardRows = el('leaderboardRows');
-      const logbookContainer = el('logbookContainer');
-      const taskTags = el('taskTags');
       const memberList = el('memberList');
+      const taskTags = el('taskTags');
+      const logbookContainer = el('logbookContainer');
       const snapshot = el('snapshot');
       const installBtn = el('installBtn');
       const installStatus = el('installStatus');
       const toast = el('toast');
 
-      function showToast(message) {
-        toast.textContent = message;
+      function toastMsg(msg) {
+        toast.textContent = msg;
         toast.classList.add('show');
-        setTimeout(() => toast.classList.remove('show'), 2000);
+        setTimeout(() => toast.classList.remove('show'), 1800);
       }
 
       function todayKey() { return new Date().toISOString().slice(0, 10); }
-      function getDateKey(date) { return new Date(date).toISOString().slice(0, 10); }
-      function getLogKey(memberId, date) { return `${memberId}__${date}`; }
+      function toDateKey(v) { return new Date(v).toISOString().slice(0, 10); }
+      function logKey(memberId, dateKey) { return `${memberId}__${dateKey}`; }
 
       function loadState() {
         const raw = localStorage.getItem(STORAGE_KEY);
@@ -310,13 +345,12 @@
       }
 
       function ensureLog(memberId, dateKey) {
-        const key = getLogKey(memberId, dateKey);
+        const key = logKey(memberId, dateKey);
         if (!state.logs[key]) {
           const checks = {};
           state.tasks.forEach((task) => (checks[task] = false));
           state.logs[key] = { checks, note: '', updatedAt: new Date().toISOString() };
         }
-        if (!state.logs[key].checks) state.logs[key].checks = {};
         state.tasks.forEach((task) => {
           if (state.logs[key].checks[task] === undefined) state.logs[key].checks[task] = false;
         });
@@ -325,8 +359,8 @@
 
       function addMember() {
         const name = el('name').value.trim();
-        if (!name) return showToast('Nama wajib diisi.');
-        const member = {
+        if (!name) return toastMsg('Nama wajib diisi');
+        state.members.push({
           id: crypto.randomUUID(),
           name,
           role: el('role').value,
@@ -335,108 +369,106 @@
           phone: el('phone').value.trim(),
           note: el('note').value.trim(),
           createdAt: new Date().toISOString()
-        };
-        state.members.push(member);
+        });
         ['name','age','phone','note'].forEach((id) => (el(id).value = ''));
         el('target').value = '5';
-        saveState();
         renderAll();
-        showToast('Anggota berhasil ditambahkan.');
+        toastMsg('Anggota ditambahkan');
       }
 
-      function removeMember(memberId) {
-        state.members = state.members.filter((m) => m.id !== memberId);
-        Object.keys(state.logs).forEach((k) => k.startsWith(`${memberId}__`) && delete state.logs[k]);
-        saveState();
+      function removeMember(id) {
+        state.members = state.members.filter((m) => m.id !== id);
+        Object.keys(state.logs).forEach((k) => k.startsWith(`${id}__`) && delete state.logs[k]);
         renderAll();
-      }
-
-      function clearMembers() {
-        if (!confirm('Yakin hapus semua anggota?')) return;
-        state.members = [];
-        state.logs = {};
-        saveState();
-        renderAll();
-        showToast('Semua anggota dihapus.');
       }
 
       function addTask() {
-        const value = el('newTaskInput').value.trim();
-        if (!value) return;
-        if (state.tasks.includes(value)) return showToast('Task sudah ada.');
-        state.tasks.push(value);
+        const t = el('newTaskInput').value.trim();
+        if (!t) return;
+        if (state.tasks.includes(t)) return toastMsg('Task sudah ada');
+        state.tasks.push(t);
         el('newTaskInput').value = '';
-        saveState();
         renderAll();
       }
 
       function removeTask(task) {
-        if (DEFAULT_TASKS.includes(task)) return showToast('Task default tidak bisa dihapus.');
-        state.tasks = state.tasks.filter((t) => t !== task);
+        if (DEFAULT_TASKS.includes(task)) return toastMsg('Task default tidak bisa dihapus');
+        state.tasks = state.tasks.filter((x) => x !== task);
         Object.values(state.logs).forEach((entry) => delete entry.checks[task]);
-        saveState();
         renderAll();
       }
 
-      function computeMemberProgress(memberId, dateKey) {
-        const log = ensureLog(memberId, dateKey);
-        const done = Object.values(log.checks).filter(Boolean).length;
-        const total = state.tasks.length;
-        const percent = total ? Math.round((done / total) * 100) : 0;
-        return { done, total, percent };
+      function clearMembers() {
+        if (!confirm('Hapus semua anggota?')) return;
+        state.members = [];
+        state.logs = {};
+        renderAll();
       }
 
-      function renderHeroStats() {
-        const dateKey = getDateKey(activeDate.value || todayKey());
-        let totalChecks = 0;
-        let totalPossible = state.members.length * state.tasks.length;
-        let targetReached = 0;
-        state.members.forEach((m) => {
-          const p = computeMemberProgress(m.id, dateKey);
-          totalChecks += p.done;
-          if (p.done >= m.target) targetReached += 1;
-        });
-        const percent = totalPossible ? Math.round((totalChecks / totalPossible) * 100) : 0;
-        const cards = [
-          ['Anggota Aktif', state.members.length],
-          ['Task Aktif', state.tasks.length],
-          ['Checklist Hari Ini', `${totalChecks}/${totalPossible}`],
-          ['Capaian Harian', `${percent}%`],
-          ['Capai Target', `${targetReached} anggota`]
-        ];
-        heroStats.innerHTML = cards.map(([label, value]) => `<div class="card"><span>${label}</span><b>${value}</b></div>`).join('');
+      function memberProgress(memberId, dateKey) {
+        const checks = ensureLog(memberId, dateKey).checks;
+        const done = Object.values(checks).filter(Boolean).length;
+        const total = state.tasks.length;
+        return { done, total, percent: total ? Math.round(done / total * 100) : 0 };
       }
 
       function filteredMembers() {
         const q = memberSearch.value.trim().toLowerCase();
         return state.members.filter((m) => {
-          const roleOk = memberFilter.value === 'all' || m.role === memberFilter.value;
-          const searchOk = !q || m.name.toLowerCase().includes(q);
-          return roleOk && searchOk;
+          const okRole = memberFilter.value === 'all' || m.role === memberFilter.value;
+          const okQuery = !q || m.name.toLowerCase().includes(q);
+          return okRole && okQuery;
         });
       }
 
+      function card(label, value, animate = true) {
+        const count = String(value).replace(/[^\d]/g, '');
+        const attr = animate && count ? ` data-count=\"${count}\"` : '';
+        return `<div class=\"card\"><span>${label}</span><b${attr}>${value}</b></div>`;
+      }
+
+      function renderHeroStats() {
+        const dateKey = toDateKey(activeDate.value || todayKey());
+        let totalDone = 0;
+        let reachTarget = 0;
+        state.members.forEach((m) => {
+          const p = memberProgress(m.id, dateKey);
+          totalDone += p.done;
+          if (p.done >= m.target) reachTarget += 1;
+        });
+        const totalPossible = state.members.length * state.tasks.length;
+        const percent = totalPossible ? Math.round(totalDone / totalPossible * 100) : 0;
+
+        heroStats.innerHTML = [
+          card('Anggota Aktif', state.members.length),
+          card('Task Aktif', state.tasks.length),
+          card('Checklist Hari Ini', `${totalDone}/${totalPossible}`),
+          card('Capaian Harian', `${percent}%`),
+          card('Capai Target', `${reachTarget} anggota`)
+        ].join('');
+        animateCounters(heroStats);
+      }
+
       function renderDashboard() {
-        const dateKey = getDateKey(activeDate.value || todayKey());
+        const dateKey = toDateKey(activeDate.value || todayKey());
         const rows = filteredMembers().map((m) => {
-          const p = computeMemberProgress(m.id, dateKey);
-          const status = p.done >= m.target ? '✅ Target tercapai' : '⏳ Belum tercapai';
-          const progressBar = `<div class="progress"><div style="width:${p.percent}%"></div></div><small>${p.done}/${p.total} (${p.percent}%)</small>`;
+          const p = memberProgress(m.id, dateKey);
           return `<tr>
-            <td><b>${m.name}</b><br/><small>${m.age ? `${m.age} th` : 'Usia -'} • ${m.phone || 'No WA -'}</small></td>
+            <td><b>${m.name}</b><br/><small>${m.age ? m.age + ' th' : '-'} • ${m.phone || '-'}</small></td>
             <td><span class="member-chip">${m.role}</span></td>
             <td>${m.target}</td>
-            <td>${progressBar}</td>
-            <td>${status}</td>
+            <td><div class="progress"><div style="width:${p.percent}%"></div></div><small>${p.done}/${p.total} (${p.percent}%)</small></td>
+            <td>${p.done >= m.target ? '✅ Tercapai' : '⏳ Proses'}</td>
             <td><button class="btn-danger" data-remove="${m.id}">Hapus</button></td>
           </tr>`;
         }).join('');
-        dashboardRows.innerHTML = rows || `<tr><td colspan="6">Belum ada data anggota sesuai filter.</td></tr>`;
 
+        dashboardRows.innerHTML = rows || '<tr><td colspan="6">Belum ada data sesuai filter.</td></tr>';
         dashboardRows.querySelectorAll('[data-remove]').forEach((btn) => {
           btn.addEventListener('click', () => {
-            const member = state.members.find((m) => m.id === btn.getAttribute('data-remove'));
-            if (member && confirm(`Hapus ${member.name}?`)) removeMember(member.id);
+            const id = btn.getAttribute('data-remove');
+            const m = state.members.find((x) => x.id === id);
+            if (m && confirm(`Hapus ${m.name}?`)) removeMember(id);
           });
         });
       }
@@ -448,69 +480,45 @@
         }
         memberList.innerHTML = state.members.map((m) => `
           <div class="timeline-item">
-            <div>
-              <b>${m.name}</b> <span class="member-chip">${m.role}</span>
-              <div><small>Usia: ${m.age || '-'} • WA: ${m.phone || '-'} • Target: ${m.target}</small></div>
-              <div><small>Catatan: ${m.note || '-'}</small></div>
-            </div>
-            <button class="btn-danger" data-remove-member="${m.id}">Hapus</button>
+            <div><b>${m.name}</b> <span class="member-chip">${m.role}</span><br/><small>Usia: ${m.age || '-'} | WA: ${m.phone || '-'} | Target: ${m.target}</small><br/><small>Catatan: ${m.note || '-'}</small></div>
+            <button class="btn-danger" data-rm-member="${m.id}">Hapus</button>
           </div>
         `).join('');
-
-        memberList.querySelectorAll('[data-remove-member]').forEach((btn) => {
+        memberList.querySelectorAll('[data-rm-member]').forEach((btn) => {
           btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-remove-member');
-            const member = state.members.find((m) => m.id === id);
-            if (member && confirm(`Hapus ${member.name}?`)) removeMember(id);
+            const id = btn.getAttribute('data-rm-member');
+            const m = state.members.find((x) => x.id === id);
+            if (m && confirm(`Hapus ${m.name}?`)) removeMember(id);
           });
         });
       }
 
       function renderTaskTags() {
-        taskTags.innerHTML = state.tasks.map((task) => `
-          <span class="task-tag">${task}
-            ${DEFAULT_TASKS.includes(task) ? '' : `<button data-remove-task="${task}">x</button>`}
-          </span>
-        `).join('');
-        taskTags.querySelectorAll('[data-remove-task]').forEach((btn) => btn.addEventListener('click', () => removeTask(btn.getAttribute('data-remove-task'))));
+        taskTags.innerHTML = state.tasks.map((task) => `<span class="task-tag">${task}${DEFAULT_TASKS.includes(task) ? '' : `<button data-rm-task="${task}" class="btn-soft">x</button>`}</span>`).join('');
+        taskTags.querySelectorAll('[data-rm-task]').forEach((btn) => btn.addEventListener('click', () => removeTask(btn.getAttribute('data-rm-task'))));
       }
 
       function renderLogbook() {
-        const dateKey = getDateKey(activeDate.value || todayKey());
+        const dateKey = toDateKey(activeDate.value || todayKey());
         if (!state.members.length) {
-          logbookContainer.innerHTML = '<div class="timeline-item">Belum ada anggota. Tambahkan anggota dulu.</div>';
+          logbookContainer.innerHTML = '<div class="timeline-item">Belum ada anggota.</div>';
           return;
         }
-
         logbookContainer.innerHTML = state.members.map((m) => {
           const log = ensureLog(m.id, dateKey);
-          const checks = state.tasks.map((task) => `<label style="display:inline-flex;align-items:center;gap:6px;margin:3px 8px 3px 0"><input type="checkbox" data-member="${m.id}" data-task="${task}" ${log.checks[task] ? 'checked' : ''}/> ${task}</label>`).join('');
-          const p = computeMemberProgress(m.id, dateKey);
-          return `<div class="timeline-item">
-            <div style="width:100%">
-              <b>${m.name}</b> <small>• ${m.role} • ${dateKey}</small>
-              <div style="margin-top:6px">${checks}</div>
-              <div style="margin-top:8px">
-                <label>Catatan Harian ${m.name}</label>
-                <textarea data-note="${m.id}" placeholder="Tulis catatan perilaku/progres spesifik...">${log.note || ''}</textarea>
-              </div>
-              <div class="progress"><div style="width:${p.percent}%"></div></div>
-              <small>Progress ${p.done}/${p.total} • ${p.percent}%</small>
-            </div>
-          </div>`;
+          const p = memberProgress(m.id, dateKey);
+          const checks = state.tasks.map((task) => `<label style="display:inline-flex;align-items:center;gap:6px;margin:4px 8px 4px 0"><input data-member="${m.id}" data-task="${task}" type="checkbox" ${log.checks[task] ? 'checked' : ''}/> ${task}</label>`).join('');
+          return `<div class="timeline-item"><div style="width:100%"><b>${m.name}</b> <small>• ${dateKey}</small><div style="margin-top:6px">${checks}</div><div style="margin-top:8px"><label>Catatan Harian</label><textarea data-note="${m.id}" placeholder="Tulis catatan...">${log.note || ''}</textarea></div><div class="progress"><div style="width:${p.percent}%"></div></div><small>${p.done}/${p.total} • ${p.percent}%</small></div></div>`;
         }).join('');
 
-        logbookContainer.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
-          checkbox.addEventListener('change', (e) => {
+        logbookContainer.querySelectorAll('input[type="checkbox"]').forEach((cb) => {
+          cb.addEventListener('change', (e) => {
             const memberId = e.target.getAttribute('data-member');
             const task = e.target.getAttribute('data-task');
             const log = ensureLog(memberId, dateKey);
             log.checks[task] = e.target.checked;
             log.updatedAt = new Date().toISOString();
-            saveState();
-            renderHeroStats();
-            renderDashboard();
-            renderAnalytics();
+            renderAll();
           });
         });
 
@@ -521,54 +529,65 @@
             log.note = e.target.value.trim();
             log.updatedAt = new Date().toISOString();
             saveState();
-            showToast('Catatan tersimpan.');
+            toastMsg('Catatan tersimpan');
           });
         });
       }
 
-      function calculateStreak(memberId) {
-        let streak = 0;
-        const sorted = Object.keys(state.logs)
-          .filter((k) => k.startsWith(`${memberId}__`))
-          .map((k) => k.split('__')[1])
-          .sort()
-          .reverse();
-        for (const d of sorted) {
-          const checks = Object.values(ensureLog(memberId, d).checks).filter(Boolean).length;
-          if (checks > 0) streak += 1;
-          else break;
+      function streak(memberId) {
+        const dates = Object.keys(state.logs).filter((k) => k.startsWith(`${memberId}__`)).map((k) => k.split('__')[1]).sort().reverse();
+        let s = 0;
+        for (const d of dates) {
+          const done = Object.values(ensureLog(memberId, d).checks).filter(Boolean).length;
+          if (done > 0) s += 1; else break;
         }
-        return streak;
+        return s;
       }
 
       function renderAnalytics() {
-        const dateKey = getDateKey(activeDate.value || todayKey());
-        let totalDone = 0;
-        let totalPotential = state.members.length * state.tasks.length;
-
-        const leaderboard = state.members.map((m) => {
-          const memberKeys = Object.keys(state.logs).filter((k) => k.startsWith(`${m.id}__`));
-          let memberTotal = 0;
-          memberKeys.forEach((k) => {
-            memberTotal += Object.values(state.logs[k].checks || {}).filter(Boolean).length;
-          });
-          const avg = memberKeys.length ? (memberTotal / memberKeys.length).toFixed(1) : '0.0';
-          const todayDone = computeMemberProgress(m.id, dateKey).done;
-          totalDone += todayDone;
-          return { ...m, total: memberTotal, avg, streak: calculateStreak(m.id) };
+        const dateKey = toDateKey(activeDate.value || todayKey());
+        let totalToday = 0;
+        const result = state.members.map((m) => {
+          const keys = Object.keys(state.logs).filter((k) => k.startsWith(`${m.id}__`));
+          let total = 0;
+          keys.forEach((k) => (total += Object.values(state.logs[k].checks || {}).filter(Boolean).length));
+          const avg = keys.length ? (total / keys.length).toFixed(1) : '0.0';
+          totalToday += memberProgress(m.id, dateKey).done;
+          return { ...m, total, avg, streak: streak(m.id) };
         }).sort((a,b) => b.total - a.total);
 
-        const overall = totalPotential ? Math.round((totalDone / totalPotential) * 100) : 0;
-        const best = leaderboard[0]?.name || '-';
+        const potentialToday = state.members.length * state.tasks.length;
+        const dailyPercent = potentialToday ? Math.round(totalToday / potentialToday * 100) : 0;
 
         analyticsStats.innerHTML = [
-          ['Rata-rata Global Hari Ini', `${overall}%`],
-          ['Top Performer', best],
-          ['Total Task Tercentang Hari Ini', totalDone],
-          ['Jumlah Data Log Tersimpan', Object.keys(state.logs).length]
-        ].map(([label, value]) => `<div class="card"><span>${label}</span><b>${value}</b></div>`).join('');
+          card('Rata-rata Global Hari Ini', `${dailyPercent}%`),
+          card('Top Performer', result[0]?.name || '-', false),
+          card('Task Tercentang Hari Ini', totalToday),
+          card('Total Log Tersimpan', Object.keys(state.logs).length)
+        ].join('');
+        animateCounters(analyticsStats);
 
-        leaderboardRows.innerHTML = leaderboard.map((m, idx) => `<tr><td>${idx+1}</td><td>${m.name}</td><td>${m.total}</td><td>${m.avg}</td><td>${m.streak} hari</td></tr>`).join('') || '<tr><td colspan="5">Belum ada data.</td></tr>';
+        leaderboardRows.innerHTML = result.map((m, i) => `<tr><td>${i + 1}</td><td>${m.name}</td><td>${m.total}</td><td>${m.avg}</td><td>${m.streak} hari</td></tr>`).join('') || '<tr><td colspan="5">Belum ada data</td></tr>';
+      }
+
+      function animateCounters(container) {
+        container.querySelectorAll('[data-count]').forEach((node) => {
+          const end = Number(node.getAttribute('data-count') || 0);
+          if (!Number.isFinite(end)) return;
+          const duration = 400;
+          const start = performance.now();
+          function frame(now) {
+            const progress = Math.min((now - start) / duration, 1);
+            const value = Math.round(end * progress);
+            if (/\d+\/$/.test(node.textContent)) return;
+            const raw = node.textContent;
+            if (raw.includes('%')) node.textContent = `${value}%`;
+            else if (/anggota/.test(raw)) node.textContent = `${value} anggota`;
+            else node.textContent = String(value);
+            if (progress < 1) requestAnimationFrame(frame);
+          }
+          requestAnimationFrame(frame);
+        });
       }
 
       function exportData() {
@@ -586,41 +605,36 @@
         reader.onload = () => {
           try {
             const parsed = JSON.parse(reader.result);
-            if (!parsed || typeof parsed !== 'object') throw new Error('Invalid');
             state.members = parsed.members || [];
             state.logs = parsed.logs || {};
             state.tasks = parsed.tasks?.length ? parsed.tasks : [...DEFAULT_TASKS];
             state.theme = parsed.theme || 'light';
-            saveState();
             applyTheme();
             renderAll();
-            showToast('Import berhasil.');
+            toastMsg('Import berhasil');
           } catch {
-            showToast('File JSON tidak valid.');
+            toastMsg('JSON tidak valid');
           }
         };
         reader.readAsText(file);
       }
 
       function resetAll() {
-        if (!confirm('Yakin reset semua data aplikasi?')) return;
+        if (!confirm('Reset semua data aplikasi?')) return;
         state.members = [];
         state.logs = {};
         state.tasks = [...DEFAULT_TASKS];
-        saveState();
         renderAll();
       }
 
       function applyTheme() {
-        const dark = state.theme === 'dark';
-        document.body.style.filter = dark ? 'invert(1) hue-rotate(180deg)' : '';
+        document.documentElement.setAttribute('data-theme', state.theme);
       }
 
       function toggleTheme() {
         state.theme = state.theme === 'light' ? 'dark' : 'light';
         applyTheme();
         saveState();
-        showToast(`Mode ${state.theme} aktif.`);
       }
 
       function initTabs() {
@@ -638,9 +652,9 @@
         if ('serviceWorker' in navigator) {
           try {
             await navigator.serviceWorker.register('/sw.js');
-            installStatus.textContent = 'PWA ready. Tunggu prompt install.';
+            installStatus.textContent = 'PWA ready untuk localhost/hosting HTTPS';
           } catch {
-            installStatus.textContent = 'Service Worker gagal aktif.';
+            installStatus.textContent = 'Service worker gagal aktif';
           }
         }
 
@@ -648,12 +662,12 @@
           e.preventDefault();
           deferredPrompt = e;
           installBtn.disabled = false;
-          installStatus.textContent = 'Aplikasi siap di-install.';
+          installStatus.textContent = 'App siap di-install';
         });
 
         window.addEventListener('appinstalled', () => {
           installBtn.disabled = true;
-          installStatus.textContent = 'Aplikasi ter-install ✅';
+          installStatus.textContent = 'Aplikasi berhasil di-install';
         });
 
         installBtn.addEventListener('click', async () => {
@@ -682,7 +696,6 @@
       memberSearch.addEventListener('input', renderDashboard);
       memberFilter.addEventListener('change', renderDashboard);
       activeDate.addEventListener('change', () => { renderHeroStats(); renderDashboard(); renderLogbook(); renderAnalytics(); });
-
       el('exportBtn').addEventListener('click', exportData);
       el('importBtn').addEventListener('click', () => el('importFile').click());
       el('importFile').addEventListener('change', (e) => { if (e.target.files[0]) importData(e.target.files[0]); e.target.value = ''; });

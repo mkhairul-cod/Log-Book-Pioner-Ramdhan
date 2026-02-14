@@ -1,51 +1,48 @@
 # Log Book Pioner Ramadhan Pro
 
-Aplikasi web base ini sudah di-upgrade menjadi versi **lebih detail, spesifik, dan modern (UI/UX)** untuk monitoring Ramadhan keluarga.
+Aplikasi ini sekarang sudah dibuat lebih lengkap: **detail fitur, UI/UX modern, animasi halus, dan siap dipakai di localhost**.
 
-## Fitur Lengkap
-- **Dashboard modern** dengan statistik real-time harian:
-  - jumlah anggota aktif
-  - jumlah task aktif
-  - checklist harian tercapai
-  - persentase capaian
-  - jumlah anggota capai target
-- **Manajemen anggota detail**:
-  - nama, peran, usia, target poin harian, no WA, catatan khusus
-- **Logbook harian spesifik**:
-  - checklist default ibadah (shalat per waktu, tilawah, tarawih, dll)
-  - task custom tambahan sesuai kebutuhan keluarga
-  - catatan harian per anggota
-- **Analitik lanjutan**:
-  - leaderboard anggota
-  - total checklist per anggota
-  - rata-rata progres per hari
-  - streak keaktifan
-- **Pengaturan data**:
-  - export backup JSON
-  - import restore JSON
+## Fitur Utama
+- Dashboard monitoring harian dengan statistik real-time.
+- Manajemen anggota detail (nama, peran, usia, target, WhatsApp, catatan khusus).
+- Logbook harian per anggota dengan:
+  - checklist ibadah default
+  - task custom
+  - catatan harian
+- Analitik lanjutan:
+  - total checklist
+  - rata-rata per hari
+  - leaderboard
+  - streak aktivitas
+- Pengaturan data:
+  - export JSON
+  - import JSON
   - reset semua data
   - snapshot data read-only
-- **PWA / WPA Builder**:
-  - install app ke home screen
-  - dukungan service worker
+- PWA/WPA Builder:
+  - install app
+  - service worker
   - manifest + icon
-- **Tambahan UX**:
-  - navigasi tab (dashboard, anggota, logbook, analitik, settings)
-  - mode gelap
+
+## Upgrade UI/UX yang ditambahkan
+- Layout modern dengan sidebar navigasi multi-panel.
+- Tema terang/gelap native (tanpa invert hack).
+- Animasi modern:
+  - fade-in panel
+  - floating background blobs
+  - transisi progress bar
+  - hover micro-interaction pada tombol
   - toast notification
-  - pencarian + filter anggota
 
-## Teknologi
-- Single-page app berbasis **HTML + CSS + Vanilla JS**.
-- Penyimpanan data lokal via `localStorage`.
-- Bisa dijalankan sebagai static site (termasuk Vercel).
+## Menjalankan di Localhost
+Jalankan dari root project:
 
-## Jalankan Lokal
 ```bash
 python3 -m http.server 4173
 ```
-Buka:
+
+Lalu buka:
 - `http://localhost:4173`
 
 ## Deploy
-Konfigurasi `vercel.json` tetap dipakai agar route root menuju `index.html`.
+`vercel.json` tetap dapat dipakai agar route root menuju `index.html`.
